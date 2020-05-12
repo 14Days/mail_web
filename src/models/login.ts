@@ -1,9 +1,11 @@
 import { stringify } from 'querystring';
 import { history, Reducer, Effect } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
+import { message } from 'antd';
+import { login } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
+
 
 export interface StateType {
   status?: 'ok' | 'error';
@@ -32,16 +34,24 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
+      const {username, password}=payload;
+      const response = yield call(login, username, password);
+      console.log(response)
+      
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.msg === 'success') {
+        message.success('登录成功！');
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            status: 'ok',
+            token: response.token,
+          }
+        });
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
+        
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
@@ -55,6 +65,9 @@ const Model: LoginModelType = {
           }
         }
         history.replace(redirect || '/');
+      }
+      else {
+        message.warning(response.msg)
       }
     },
 

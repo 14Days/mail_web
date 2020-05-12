@@ -1,12 +1,15 @@
 import { Effect, history, Reducer } from 'umi';
 import { message } from 'antd';
-import { fakeAccountLogin, getFakeCaptcha } from './service';
+import { fakeAccountLogin, getFakeCaptcha, login } from './service';
 import { getPageQuery, setAuthority } from './utils/utils';
 
 export interface StateType {
-  status?: 'ok' | 'error';
-  type?: string;
-  currentAuthority?: 'user' | 'guest' | 'admin';
+  // status?: 'ok' | 'error';
+  // type?: string;
+  // currentAuthority?: 'user' | 'guest' | 'admin';
+  token?:string;
+  username?: string;
+  password?: string;
 }
 
 export interface ModelType {
@@ -25,12 +28,15 @@ const Model: ModelType = {
   namespace: 'userAndlogin',
 
   state: {
-    status: undefined,
+    status: 'ok',
   },
 
+  // 异步
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+      // const response = yield call(fakeAccountLogin, payload);
+      const response = yield call(login, payload);
+      console.log(response)
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -62,6 +68,7 @@ const Model: ModelType = {
     },
   },
 
+  // 同步
   reducers: {
     changeLoginStatus(state, { payload }) {
       setAuthority(payload.currentAuthority);

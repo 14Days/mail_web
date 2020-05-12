@@ -1,42 +1,29 @@
-import { Tabs, Form, Button, Checkbox, Input } from 'antd';
+import { Form, Button, Checkbox, Input } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React from 'react';
 import styles from './index.less';
+import { Dispatch, AnyAction, Link, connect } from 'umi';
 import { getPageQuery } from '@/utils/utils';
 
-import { Link, history, useModel } from 'umi';
+export interface StateType {
+  token?: string;
+  username?: string;
+  password?: string;
+}
 
-/**
- * 此方法会跳转到 redirect 参数所在的位置
- */
-const replaceGoto = () => {
-  const urlParams = new URL(window.location.href);
-  const params = getPageQuery();
-  let { redirect } = params as { redirect: string };
-  if (redirect) {
-    const redirectUrlParams = new URL(redirect);
-    if (redirectUrlParams.origin === urlParams.origin) {
-      redirect = redirect.substr(urlParams.origin.length);
-      if (redirect.match(/^\/.*#/)) {
-        redirect = redirect.substr(redirect.indexOf('#') + 1);
-      }
-    } else {
-      window.location.href = '/';
-      return;
-    }
-  }
-  history.replace(redirect || '/users/search');
-};
-
-const onFinish = values => {
-  console.log('Received values of form: ', values);
-  replaceGoto();
-};
-
-export default class Login extends React.Component {
-  
+const Login  = (props) => {
+  const onFinish = values => {
+    const { dispatch } = props;
+    dispatch({
+      type: 'login/login',
+      payload: {
+        ...values,
+      },
+    });
     
-  render(){
+    console.log('Received values of form: ', values);
+    };
+     
     return (
       //  
       <Form
@@ -68,12 +55,28 @@ export default class Login extends React.Component {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" className={styles.login}>
+          <Button type="primary" htmlType="submit" className={styles.login} >
             Log in
         </Button>
         </Form.Item>
       </Form>
     );
-  }
+  };
   
-};
+
+export default connect(
+  ({
+    login,
+    loading,
+  }: {
+    login: StateType;
+    loading: {
+      effects: {
+        [key: string]: boolean;
+      };
+    };
+  }) => ({
+    login,
+    submitting: loading.effects['login/login'],
+  }),
+)(Login);
