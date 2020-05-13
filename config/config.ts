@@ -3,7 +3,8 @@ import { defineConfig, utils } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import webpackPlugin from './plugin.config';
-const { winPath } = utils; // preview.pro.ant.design only do not use in your production ;
+const { winPath } = utils;
+// preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
 
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION, REACT_APP_ENV, GA_KEY } = process.env;
@@ -12,8 +13,8 @@ export default defineConfig({
   antd: {},
   analytics: GA_KEY
     ? {
-        ga: GA_KEY,
-      }
+      ga: GA_KEY,
+    }
     : false,
   dva: {
     hmr: true,
@@ -128,55 +129,56 @@ export default defineConfig({
               path: '/users',
               icon: 'user',
               name: '用户管理',
-              routes: [
-                {
-                  path: '/users/search',
-                  name: 'search-list',
-                  component: './list/search',
-                  routes: [
-                    {
-                      path: '/users/search',
-                      redirect: '/users/search/articles',
-                    },
-                    {
-                      name: 'articles',
-                      icon: 'smile',
-                      path: '/users/search/articles',
-                      component: './list/search/articles',
-                    },
-                    {
-                      name: 'projects',
-                      icon: 'smile',
-                      path: '/users/search/projects',
-                      component: './list/search/projects',
-                    },
-                    {
-                      name: 'applications',
-                      icon: 'smile',
-                      path: '/users/search/applications',
-                      component: './list/search/applications',
-                    },
-                  ],
-                },
-                {
-                  name: '用户列表',
-                  icon: 'profile',
-                  path: '/users/table-list',
-                  component: './list/table-list',
-                },
-                {
-                  name: '用户管理',
-                  icon: 'smile',
-                  path: '/users/basic-list',
-                  component: './list/basic-list',
-                },
-                {
-                  name: 'card-list',
-                  icon: 'smile',
-                  path: '/users/card-list',
-                  component: './list/card-list',
-                },
-              ],
+              component: './users',
+              // routes: [
+              //   {
+              //     path: '/users/search',
+              //     name: 'search-list',
+              //     component: './list/search',
+              //     routes: [
+              //       {
+              //         path: '/users/search',
+              //         redirect: '/users/search/articles',
+              //       },
+              //       {
+              //         name: 'articles',
+              //         icon: 'smile',
+              //         path: '/users/search/articles',
+              //         component: './list/search/articles',
+              //       },
+              //       {
+              //         name: 'projects',
+              //         icon: 'smile',
+              //         path: '/users/search/projects',
+              //         component: './list/search/projects',
+              //       },
+              //       {
+              //         name: 'applications',
+              //         icon: 'smile',
+              //         path: '/users/search/applications',
+              //         component: './list/search/applications',
+              //       },
+              //     ],
+              //   },
+              // {
+              //   name: '用户列表',
+              //   icon: 'profile',
+              //   path: '/users/table-list',
+              //   component: './list/table-list',
+              // },
+              // {
+              //   name: '用户管理',
+              //   icon: 'UsergroupAddOutlined',
+              //   path: '/users/basic-list',
+              //   component: './users',
+              // },
+              // {
+              //   name: 'card-list',
+              //   icon: 'smile',
+              //   path: '/users/card-list',
+              //   component: './list/card-list',
+              // },
+              // ],
             },
             {
               path: '/profile',
@@ -288,7 +290,6 @@ export default defineConfig({
             {
               path: '/',
               redirect: '/user/login',
-              authority: ['admin', 'user'],
             },
             {
               component: '404',
@@ -306,7 +307,7 @@ export default defineConfig({
   define: {
     REACT_APP_ENV: REACT_APP_ENV || false,
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:
-      ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION || '', // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+      ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION || '',
   },
   ignoreMomentLocale: true,
   lessLoader: {

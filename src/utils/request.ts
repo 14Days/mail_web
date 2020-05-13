@@ -48,9 +48,49 @@ const errorHandler = (error: { response: Response }): Response => {
 /**
  * 配置request请求时的默认参数
  */
+
 const request = extend({
-  errorHandler, // 默认错误处理
+
+  errorHandler, // 默认错误处理  
   credentials: 'include', // 默认请求是否带上cookie
+
 });
 
+
+
+//添加拦截钩子
+request.interceptors.request.use((url, options) => {
+  console.log(url)
+  let token = localStorage.getItem("token");
+  console.log(token)
+  const headers = {
+    // 'Content-Type': 'application/json',
+    // // 'Content-Type': 'application/x-www-form-urlencoded',
+    // 'Accept': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  };
+
+
+  if (token) {
+    headers['Authorization'] = token;
+  }
+
+  return (
+    {
+      url: url,
+      options: { ...options, headers: headers },
+    }
+  );
+});
+
+// request.interceptors.response.use((response, options) => {
+//   //拦截返回后的特殊处理
+//   // if(response.data.code == 1000001){
+//   //   console.log(response.data.msg)
+//   //   //通过返回的code 提示 token 过期 、token校验失败，做相应跳转
+//   // }
+//   return response;
+// });
+
 export default request;
+
