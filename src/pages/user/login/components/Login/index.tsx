@@ -6,63 +6,62 @@ import { Dispatch, AnyAction, Link, connect } from 'umi';
 import { getPageQuery } from '@/utils/utils';
 
 export interface StateType {
-  token?: string;
   username?: string;
   password?: string;
 }
 
-const Login  = (props) => {
+const Login = (props) => {
   const onFinish = values => {
     const { dispatch } = props;
     dispatch({
-      type: 'login/login',
+      type: 'login/userlogin',
       payload: {
         ...values,
       },
     });
-    
-    console.log('Received values of form: ', values);
-    };
-     
-    return (
-      //  
-      <Form
-        name="normal_login"
-        className="login-form"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-      >
-        <Form.Item
-          name="username"
-          rules={[{ required: true, message: 'Please input your Username!' }]}
-        >
-          <Input size="large" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: 'Please input your Password!' }]}
-        >
-          <Input size="large"
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
-            placeholder="Password"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-        </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit" className={styles.login} >
-            Log in
-        </Button>
-        </Form.Item>
-      </Form>
-    );
+    console.log('Received values of form: ', values);
   };
-  
+
+  return (
+    //  
+    <Form
+      name="normal_login"
+      className="login-form"
+      initialValues={{ remember: true }}
+      onFinish={onFinish}
+    >
+      <Form.Item
+        name="username"
+        rules={[{ required: true, message: 'Please input your Username!' }]}
+      >
+        <Input size="large" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        rules={[{ required: true, message: 'Please input your Password!' }]}
+      >
+        <Input size="large"
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type="password"
+          placeholder="Password"
+        />
+      </Form.Item>
+      <Form.Item>
+        <Form.Item name="remember" valuePropName="checked" noStyle>
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item>
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit" className={styles.login} >
+          Log in
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
 
 export default connect(
   ({
@@ -77,6 +76,6 @@ export default connect(
     };
   }) => ({
     login,
-    submitting: loading.effects['login/login'],
+    submitting: loading.effects['login/userlogin'],
   }),
 )(Login);

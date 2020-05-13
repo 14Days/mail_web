@@ -10,6 +10,7 @@ import { getPageQuery } from '@/utils/utils';
 export interface StateType {
   status?: 'ok' | 'error';
   type?: string;
+  token?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
 }
 
@@ -30,28 +31,30 @@ const Model: LoginModelType = {
 
   state: {
     status: undefined,
+    token: undefined,
+    type: undefined,
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
-      const {username, password}=payload;
+    *userlogin({ payload }, { call, put }) {
+      const { username, password } = payload;
       const response = yield call(login, username, password);
-      console.log(response)
-      
-      // Login successfully
+      // console.log(response.data.token)
       if (response.msg === 'success') {
         message.success('登录成功！');
         yield put({
           type: 'changeLoginStatus',
           payload: {
-            status: 'ok',
-            token: response.token,
+            status: response.msg,
+            token: response.data.token,
+            type: response.data.user_type,
           }
         });
+        localStorage.setItem('token', response.data.token)
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
-        
+
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
@@ -64,7 +67,7 @@ const Model: LoginModelType = {
             return;
           }
         }
-        history.replace(redirect || '/');
+        history.replace(redirect || '/users');
       }
       else {
         message.warning(response.msg)
@@ -91,6 +94,7 @@ const Model: LoginModelType = {
       return {
         ...state,
         status: payload.status,
+        token: payload.token,
         type: payload.type,
       };
     },
