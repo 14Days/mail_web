@@ -1,5 +1,4 @@
 import request from '@/utils/request';
-import { loginURL } from '@/utils/url';
 export interface LoginParamsType {
   userName: string;
   password: string;
@@ -19,7 +18,7 @@ export async function getFakeCaptcha(mobile: string) {
 }
 
 export async function login(username, password) {
-  return request(loginURL, {
+  return request('/api/login', {
     method: 'post',
     data: {
       username,

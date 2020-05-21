@@ -3,8 +3,7 @@ import { defineConfig, utils } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import webpackPlugin from './plugin.config';
-const { winPath } = utils;
-// preview.pro.ant.design only do not use in your production ;
+const { winPath } = utils; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
 
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION, REACT_APP_ENV, GA_KEY } = process.env;
@@ -13,8 +12,8 @@ export default defineConfig({
   antd: {},
   analytics: GA_KEY
     ? {
-      ga: GA_KEY,
-    }
+        ga: GA_KEY,
+      }
     : false,
   dva: {
     hmr: true,
@@ -39,33 +38,18 @@ export default defineConfig({
       component: '../layouts/BlankLayout',
       routes: [
         {
-          path: '/user',
+          path: '/admin',
           component: '../layouts/UserLayout',
           routes: [
             {
-              path: '/user',
-              redirect: '/user/login',
+              path: '/admin',
+              redirect: '/admin/login',
             },
             {
               name: 'login',
               icon: 'smile',
-              path: '/user/login',
-              component: './user/login',
-            },
-            {
-              name: 'register-result',
-              icon: 'smile',
-              path: '/user/register-result',
-              component: './user/register-result',
-            },
-            {
-              name: 'register',
-              icon: 'smile',
-              path: '/user/register',
-              component: './user/register',
-            },
-            {
-              component: '404',
+              path: '/admin/login',
+              component: './admin/login',
             },
           ],
         },
@@ -129,8 +113,7 @@ export default defineConfig({
               path: '/users',
               icon: 'user',
               name: '用户管理',
-              component: './users',
-              // routes: [
+              component: './users', // routes: [
               //   {
               //     path: '/users/search',
               //     name: 'search-list',
@@ -289,7 +272,7 @@ export default defineConfig({
             },
             {
               path: '/',
-              redirect: '/user/login',
+              redirect: '/admin/login',
             },
             {
               component: '404',
@@ -320,7 +303,7 @@ export default defineConfig({
           resourcePath: string;
         },
         _: string,
-        localName: string,
+        localName: string
       ) => {
         if (
           context.resourcePath.includes('node_modules') ||

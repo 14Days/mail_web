@@ -39,7 +39,6 @@ const Model: LoginModelType = {
     *userlogin({ payload }, { call, put }) {
       const { username, password } = payload;
       const response = yield call(login, username, password);
-      // console.log(response.data.token)
       if (response.msg === 'success') {
         message.success('登录成功！');
         yield put({
@@ -77,9 +76,9 @@ const Model: LoginModelType = {
     logout() {
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note
-      if (window.location.pathname !== '/user/login' && !redirect) {
+      if (window.location.pathname !== '/admin/login' && !redirect) {
         history.replace({
-          pathname: '/user/login',
+          pathname: '/admin/login',
           search: stringify({
             redirect: window.location.href,
           }),

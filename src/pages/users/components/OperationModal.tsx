@@ -3,13 +3,23 @@ import moment from 'moment';
 import { Modal, Result, Button, Form, DatePicker, Input, Select } from 'antd';
 import { BasicListItemDataType } from '../data.d';
 import styles from '../style.less';
+import { connect, Dispatch } from 'umi';
 
+export interface StateType {
+  list: BasicListItemDataType[];
+  count: number;
+  info: Partial<BasicListItemDataType> | undefined;
+  msg: string;
+}
 interface OperationModalProps {
   done: boolean;
   visible: boolean;
-  current: Partial<BasicListItemDataType> | undefined;
+  current: Partial<BasicListItemDataType> | undefined;  
   onDone: () => void;
   onSubmit: (values: BasicListItemDataType) => void;
+  dispatch: Dispatch<any>;
+  loading: boolean;
+  userList: StateType;
   onCancel: () => void;
 }
 
@@ -20,23 +30,23 @@ const formLayout = {
 };
 
 const OperationModal: FC<OperationModalProps> = (props) => {
+  
   const [form] = Form.useForm();
-  const { done, visible, current, onDone, onCancel, onSubmit } = props;
-
+  const { done, visible, current, onDone, onCancel, onSubmit,userList:{info,msg} } = props;
   useEffect(() => {
     if (form && !visible) {
       form.resetFields();
-    }
+    }    
   }, [props.visible]);
 
   useEffect(() => {
-    if (current) {
+    if (info) {
       form.setFieldsValue({
-        ...current,
-        createdAt: current.createdAt ? moment(current.createdAt) : null,
+        ...info,
+        createdAt: info.createdAt ? moment(info.createdAt) : null,
       });
     }
-  }, [props.current]);
+  }, [props.userList.info]);
 
   const handleSubmit = () => {
     if (!form) return;
@@ -58,11 +68,11 @@ const OperationModal: FC<OperationModalProps> = (props) => {
       return (
         <Result
           status="success"
-          title="操作成功"
-          subTitle="一系列的信息描述，很短同样也可以带标点。"
+          title="信息修改成功"
+          // subTitle="一系列的信息描述，很短同样也可以带标点。"
           extra={
             <Button type="primary" onClick={onDone}>
-              知道了
+              好的
             </Button>
           }
           className={styles.formResult}
@@ -72,27 +82,52 @@ const OperationModal: FC<OperationModalProps> = (props) => {
     return (
       <Form {...formLayout} form={form} onFinish={handleFinish}>
         <Form.Item
-          name="title"
+          name="username"
           label="用户邮箱"
           rules={[{ required: true, message: '请输入用户邮箱' }]}
+        >
+          <Input placeholder="请输入" />
+        </Form.Item>
+        <Form.Item
+          name="nickname"
+          label="用户昵称"
+          rules={[{ required: true, message: '请输入用户昵称' }]}
         >
           <Input placeholder="请输入" />
           
         </Form.Item>
         <Form.Item
-          name="username"
-          label="用户昵称"
-          rules={[{ required: true, message: '请输入用户昵称' }]}
+          name="sex"
+          label="性别"
+          rules={[{ required: true, message: '请输入用户性别' }]}
         >
           <Input placeholder="请输入" />
 
         </Form.Item>
         <Form.Item
-          name="pwd"
+          name="password"
           label="用户密码"
-          rules={[{ required: true, message: '请输入用户密码' }]}
+          // 判断密码是否符合要求
+          rules={[({ getFieldValue }) => ({
+            validator(rule, value) {
+              let l_flag=false,d_flag=false;
+                for (var i in value) {
+                    var asc = value.charCodeAt(i);
+                    if ((asc >= 65 && asc <= 90 || asc >= 97 && asc <= 122)) {
+                        l_flag=true;
+                    }
+                    if((asc>=48 && asc <=57)){
+                      d_flag=true;
+                    }
+                  }                
+              if (l_flag && d_flag || !value ) {
+                return Promise.resolve();
+              }
+              return Promise.reject('密码至少六位且包含字母和数字');
+            },
+          }) ]}
         >
-          <Input placeholder="请输入"/>
+          <Input.Password placeholder="******"/>
           {/* <DatePicker
             showTime
             placeholder="请选择"
@@ -101,7 +136,7 @@ const OperationModal: FC<OperationModalProps> = (props) => {
           /> */}
         </Form.Item>
         <Form.Item
-          name="type"
+          name="user_type"
           label="用户权限"
           rules={[{ required: true, message: '请选择用户权限' }]}
         >
@@ -123,7 +158,7 @@ const OperationModal: FC<OperationModalProps> = (props) => {
 
   return (
     <Modal
-      title={done ? null : `用户${current ? '编辑' : '添加'}`}
+      title={done ? null : `用户${current ? '资料' : '添加'}`}
       className={styles.standardListForm}
       width={640}
       bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -136,4 +171,17 @@ const OperationModal: FC<OperationModalProps> = (props) => {
   );
 };
 
-export default OperationModal;
+export default connect(
+  ({
+    userList,
+    loading,
+  }: {
+    userList: StateType;
+    loading: {
+      models: { [key: string]: boolean };
+    };
+  }) => ({
+    userList,
+    loading: loading.models.users,
+  }),
+)(OperationModal);

@@ -2,8 +2,7 @@ import { Form, Button, Checkbox, Input } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React from 'react';
 import styles from './index.less';
-import { Dispatch, AnyAction, Link, connect } from 'umi';
-import { getPageQuery } from '@/utils/utils';
+import { connect } from 'umi';
 
 export interface StateType {
   username?: string;

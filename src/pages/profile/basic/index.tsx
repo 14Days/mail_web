@@ -1,11 +1,11 @@
 import { Badge, Card, Descriptions, Divider, Table } from 'antd';
 import React, { Component } from 'react';
-
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect, Dispatch } from 'umi';
 import { BasicProfileDataType } from './data.d';
 import styles from './style.less';
-
+import ListVertical from './ListVertical';
+import ListResposive from './ListResposive';
 const progressColumns = [
   {
     title: '时间',
@@ -25,10 +25,10 @@ const progressColumns = [
       if (text === 'success') {
         return <Badge status="success" text="成功" />;
       }
+
       return <Badge status="processing" text="进行中" />;
     },
   },
-
   {
     title: '操作员ID',
     dataIndex: 'operator',
@@ -40,7 +40,6 @@ const progressColumns = [
     key: 'cost',
   },
 ];
-
 interface BasicProps {
   loading: boolean;
   dispatch: Dispatch<any>;
@@ -62,10 +61,11 @@ class Basic extends Component<BasicProps, BasicState> {
     const { profileAndbasic, loading } = this.props;
     const { basicGoods, basicProgress } = profileAndbasic;
     let goodsData: typeof basicGoods = [];
+
     if (basicGoods.length) {
       let num = 0;
       let amount = 0;
-      basicGoods.forEach((item) => {
+      basicGoods.forEach(item => {
         num += Number(item.num);
         amount += Number(item.amount);
       });
@@ -75,19 +75,25 @@ class Basic extends Component<BasicProps, BasicState> {
         amount,
       });
     }
+
     const renderContent = (value: any, row: any, index: any) => {
       const obj: {
         children: any;
-        props: { colSpan?: number };
+        props: {
+          colSpan?: number;
+        };
       } = {
         children: value,
         props: {},
       };
+
       if (index === basicGoods.length) {
         obj.props.colSpan = 0;
       }
+
       return obj;
     };
+
     const goodsColumns = [
       {
         title: '商品编号',
@@ -97,8 +103,17 @@ class Basic extends Component<BasicProps, BasicState> {
           if (index < basicGoods.length) {
             return <a href="">{text}</a>;
           }
+
           return {
-            children: <span style={{ fontWeight: 600 }}>总计</span>,
+            children: (
+              <span
+                style={{
+                  fontWeight: 600,
+                }}
+              >
+                总计
+              </span>
+            ),
             props: {
               colSpan: 4,
             },
@@ -133,7 +148,16 @@ class Basic extends Component<BasicProps, BasicState> {
           if (index < basicGoods.length) {
             return text;
           }
-          return <span style={{ fontWeight: 600 }}>{text}</span>;
+
+          return (
+            <span
+              style={{
+                fontWeight: 600,
+              }}
+            >
+              {text}
+            </span>
+          );
         },
       },
       {
@@ -145,31 +169,62 @@ class Basic extends Component<BasicProps, BasicState> {
           if (index < basicGoods.length) {
             return text;
           }
-          return <span style={{ fontWeight: 600 }}>{text}</span>;
+
+          return (
+            <span
+              style={{
+                fontWeight: 600,
+              }}
+            >
+              {text}
+            </span>
+          );
         },
       },
     ];
     return (
       <PageHeaderWrapper>
+        <ListVertical />
+        <ListResposive />
         <Card bordered={false}>
-          <Descriptions title="退款申请" style={{ marginBottom: 32 }}>
+          <Descriptions
+            title="退款申请"
+            style={{
+              marginBottom: 32,
+            }}
+          >
             <Descriptions.Item label="取货单号">1000000000</Descriptions.Item>
             <Descriptions.Item label="状态">已取货</Descriptions.Item>
             <Descriptions.Item label="销售单号">1234123421</Descriptions.Item>
             <Descriptions.Item label="子订单">3214321432</Descriptions.Item>
           </Descriptions>
-          <Divider style={{ marginBottom: 32 }} />
-          <Descriptions title="用户信息" style={{ marginBottom: 32 }}>
+          <Divider
+            style={{
+              marginBottom: 32,
+            }}
+          />
+          <Descriptions
+            title="用户信息"
+            style={{
+              marginBottom: 32,
+            }}
+          >
             <Descriptions.Item label="用户姓名">付小小</Descriptions.Item>
             <Descriptions.Item label="联系电话">18100000000</Descriptions.Item>
             <Descriptions.Item label="常用快递">菜鸟仓储</Descriptions.Item>
             <Descriptions.Item label="取货地址">浙江省杭州市西湖区万塘路18号</Descriptions.Item>
             <Descriptions.Item label="备注">无</Descriptions.Item>
           </Descriptions>
-          <Divider style={{ marginBottom: 32 }} />
+          <Divider
+            style={{
+              marginBottom: 32,
+            }}
+          />
           <div className={styles.title}>退货商品</div>
           <Table
-            style={{ marginBottom: 24 }}
+            style={{
+              marginBottom: 24,
+            }}
             pagination={false}
             loading={loading}
             dataSource={goodsData}
@@ -178,7 +233,9 @@ class Basic extends Component<BasicProps, BasicState> {
           />
           <div className={styles.title}>退货进度</div>
           <Table
-            style={{ marginBottom: 16 }}
+            style={{
+              marginBottom: 16,
+            }}
             pagination={false}
             loading={loading}
             dataSource={basicProgress}
@@ -197,10 +254,12 @@ export default connect(
   }: {
     profileAndbasic: BasicProfileDataType;
     loading: {
-      effects: { [key: string]: boolean };
+      effects: {
+        [key: string]: boolean;
+      };
     };
   }) => ({
     profileAndbasic,
     loading: loading.effects['profileAndbasic/fetchBasic'],
-  }),
+  })
 )(Basic);

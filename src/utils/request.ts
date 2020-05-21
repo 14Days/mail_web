@@ -60,13 +60,9 @@ const request = extend({
 
 //添加拦截钩子
 request.interceptors.request.use((url, options) => {
-  console.log(url)
   let token = localStorage.getItem("token");
-  console.log(token)
+  // console.log(token)
   const headers = {
-    // 'Content-Type': 'application/json',
-    // // 'Content-Type': 'application/x-www-form-urlencoded',
-    // 'Accept': 'application/json',
     'Access-Control-Allow-Origin': '*',
   };
 

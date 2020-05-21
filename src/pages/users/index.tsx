@@ -1,34 +1,22 @@
 import React, { FC, useRef, useState, useEffect } from 'react';
-import { DownOutlined, PlusOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Card,
-  Dropdown,
-  Input,
-  List,
-  Menu,
-  Modal,
-  Radio,
-} from 'antd';
-
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Card, Input, List, Avatar } from 'antd';
 import { findDOMNode } from 'react-dom';
 import { connect, Dispatch } from 'umi';
 import OperationModal from './components/OperationModal';
 import { BasicListItemDataType } from './data.d';
+import avatar from '@/assets/img/user.png';
 import styles from './style.less';
-
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
 const { Search } = Input;
-
 export interface StateType {
   list: BasicListItemDataType[];
+  count: number;
 }
-
 interface BasicListProps {
   userList: StateType;
   dispatch: Dispatch<any>;
   loading: boolean;
+  count: number;
 }
 
 const Info: FC<{
@@ -44,55 +32,47 @@ const Info: FC<{
 );
 
 const ListContent = ({
-  data: { nickname, user_type, id },
+  data: { username, nickname, user_type, id },
 }: {
   data: BasicListItemDataType;
 }) => (
-    <div className={styles.listContent}>
-
-      <div className={styles.listContentItem}>
-        <span>编号</span>
-        <p>{id}</p>
-      </div>
-      <div className={styles.listContentItem}>
-        <span >昵称</span>
-        <p>{nickname}</p>
-      </div>
-      <div className={styles.listContentItem}>
-        <span>用户权限</span>
-        <p>{user_type}</p>
-      </div>
+  <div className={styles.listContent}>
+    {/* <div className={styles.listContentItem}>
+     <span>编号</span>
+     <p>{id}</p>
+    </div> */}
+    <div className={styles.listContentItem}>
+      <span>昵称</span>
+      <p>{nickname}</p>
     </div>
-  );
+    <div className={styles.listContentItem}>
+      <span>权限</span>
+      <p>{user_type == '2' ? 'normal user' : 'administrator'}</p>
+    </div>
+  </div>
+);
 
-export const BasicList: FC<BasicListProps> = (props) => {
-
+export const BasicList: FC<BasicListProps> = props => {
   const addBtn = useRef(null);
   const {
     loading,
     dispatch,
-    userList: { list },
+    userList: { list, count },
   } = props;
-
-  console.log(props)
   const [done, setDone] = useState<boolean>(false);
-  const [page, addPage] = useState(0);
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<Partial<BasicListItemDataType> | undefined>(undefined);
-
   useEffect(() => {
-    //获取用户列表  
+    //获取用户列表
     dispatch({
       type: 'userList/fetch',
-
     });
   }, [1]);
-
   const paginationProps = {
-    showSizeChanger: true,
+    showSizeChanger: false,
     showQuickJumper: true,
     pageSize: 5,
-    total: 50,
+    total: count,
   };
 
   const showModal = () => {
@@ -100,7 +80,7 @@ export const BasicList: FC<BasicListProps> = (props) => {
     setCurrent(undefined);
   };
 
-  const showEditModal = (item: BasicListItemDataType) => {
+  const showEditModal = (item: string) => {
     setVisible(true);
     setCurrent(item);
   };
@@ -112,40 +92,14 @@ export const BasicList: FC<BasicListProps> = (props) => {
     // });
   };
 
-  const editAndDelete = (key: string, currentItem: BasicListItemDataType) => {
-    if (key === 'edit') showEditModal(currentItem);
-    else if (key === 'delete') {
-      Modal.confirm({
-        title: '删除用户',
-        content: '确定删除该用户吗？',
-        okText: '确认',
-        cancelText: '取消',
-        onOk: () => deleteItem(currentItem.id),
-      });
-    }
-  };
-
   const extraContent = (
     <div className={styles.extraContent}>
-      <Search className={styles.extraContentSearch} placeholder="请输入用户邮箱" onSearch={() => ({})} />
+      <Search
+        className={styles.extraContentSearch}
+        placeholder="请输入用户邮箱"
+        onSearch={() => ({})}
+      />
     </div>
-  );
-
-  const MoreBtn: React.FC<{
-    item: BasicListItemDataType;
-  }> = ({ item }) => (
-    <Dropdown
-      overlay={
-        <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          <Menu.Item key="edit">编辑</Menu.Item>
-          <Menu.Item key="delete">删除</Menu.Item>
-        </Menu>
-      }
-    >
-      <a>
-        更多 <DownOutlined />
-      </a>
-    </Dropdown>
   );
 
   const setAddBtnblur = () => {
@@ -158,9 +112,11 @@ export const BasicList: FC<BasicListProps> = (props) => {
 
   const handleDone = () => {
     setAddBtnblur();
-
     setDone(false);
     setVisible(false);
+    dispatch({
+      type: 'userList/fetch',
+    });
   };
 
   const handleCancel = () => {
@@ -169,64 +125,87 @@ export const BasicList: FC<BasicListProps> = (props) => {
   };
 
   const handleSubmit = (values: BasicListItemDataType) => {
-    const id = current ? current.id : '';
-
+    const id = current ? current : '';
     setAddBtnblur();
+    setDone(true); 
+    dispatch({
+      type: 'userList/submit',
+      payload: { id, ...values },
+    });
+  };
 
-    setDone(true);
-    // dispatch({
-    //   type: 'listAndbasicList/submit',
-    //   payload: { id, ...values },
-    // });
+  const getUserInfo = (values: string) => {
+    dispatch({
+      type: 'userList/fetchUserInfo',
+      payload: values,
+    });
   };
 
   return (
     <div>
-      {/* <PageHeaderWrapper> */}
       <div className={styles.standardList}>
+        {/* 用户列表 */}
         <Card
           className={styles.listCard}
           bordered={false}
           title={<a className={styles.cardTitle}>用户管理</a>}
-          style={{ marginTop: 34, marginLeft: 24, marginRight: 24 }}
-          bodyStyle={{ padding: '0 32px 40px 32px' }}
+          style={{
+            marginTop: 34,
+            marginLeft: 24,
+            marginRight: 24,
+          }}
+          bodyStyle={{
+            padding: '0 32px 40px 32px',
+          }}
           extra={extraContent}
         >
           <Button
             type="dashed"
-            style={{ width: '100%', marginBottom: 8 }}
+            style={{
+              width: '100%',
+              marginBottom: 8,
+            }}
             onClick={showModal}
             ref={addBtn}
           >
             <PlusOutlined />
-              添加
-            </Button>
+            添加
+          </Button>
 
+          {/* <TableBordered /> */}
           <List
             size="large"
             rowKey="id"
             loading={loading}
             pagination={paginationProps}
             dataSource={list}
-            renderItem={(item) => (
+            renderItem={item => (
               <List.Item
                 actions={[
                   <a
                     key="edit"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.preventDefault();
-                      showEditModal(item);
+                      getUserInfo(item.id);
+                      showEditModal(item.id);
                     }}
                   >
                     编辑
-                    </a>,
-                  <MoreBtn key="more" item={item} />,
+                  </a>,
+                  <a
+                    key="delete" // onClick={(e) => {
+                    //   e.preventDefault();
+                    //   showEditModal(item);
+                    // }}
+                  >
+                    删除
+                  </a>,
                 ]}
               >
-                <List.Item.Meta className={styles.meta}
-                  // avatar={<Avatar src={item.logo} shape="square" size="large" />}
+                <List.Item.Meta
+                  className={styles.meta}
+                  avatar={<Avatar src={avatar} shape="square" size="small" />}
                   title={<a className={styles.title}>{item.username}</a>}
-                // description={<a className={styles.title}>15236205392@163.com"</a>}
                 />
                 <ListContent data={item} />
               </List.Item>
@@ -234,8 +213,8 @@ export const BasicList: FC<BasicListProps> = (props) => {
           />
         </Card>
       </div>
-      {/* </PageHeaderWrapper> */}
 
+      {/* 编辑/添加模态框 */}
       <OperationModal
         done={done}
         current={current}
@@ -247,7 +226,6 @@ export const BasicList: FC<BasicListProps> = (props) => {
     </div>
   );
 };
-
 export default connect(
   ({
     userList,
@@ -255,10 +233,12 @@ export default connect(
   }: {
     userList: StateType;
     loading: {
-      models: { [key: string]: boolean };
+      models: {
+        [key: string]: boolean;
+      };
     };
   }) => ({
     userList,
     loading: loading.models.users,
-  }),
+  })
 )(BasicList);
