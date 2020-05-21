@@ -31,13 +31,13 @@ const Login = (props) => {
       onFinish={onFinish}
     >
       <Form.Item
-        name="username"
+        name="adminname"
         rules={[{ required: true, message: 'Please input your Username!' }]}
       >
         <Input size="large" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
       </Form.Item>
       <Form.Item
-        name="password"
+        name="adminpwd"
         rules={[{ required: true, message: 'Please input your Password!' }]}
       >
         <Input size="large"

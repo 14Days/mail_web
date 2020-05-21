@@ -37,8 +37,8 @@ const Model: LoginModelType = {
 
   effects: {
     *userlogin({ payload }, { call, put }) {
-      const { username, password } = payload;
-      const response = yield call(login, username, password);
+      const { adminname, adminpwd } = payload;
+      const response = yield call(login, adminname, adminpwd);
       if (response.msg === 'success') {
         message.success('登录成功！');
         yield put({

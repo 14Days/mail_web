@@ -113,7 +113,8 @@ export default defineConfig({
               path: '/users',
               icon: 'user',
               name: '用户管理',
-              component: './users', // routes: [
+              component: './users', 
+              // routes: [
               //   {
               //     path: '/users/search',
               //     name: 'search-list',

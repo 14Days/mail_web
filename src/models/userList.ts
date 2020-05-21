@@ -1,9 +1,7 @@
 import { Effect, Reducer } from 'umi';
-import {  queryFakeList, } from './service';
-import { changeUserInfo,fetchUsers,getUserInfo } from '@/services/users'
+import { changeUserInfo,fetchUsers,getUserInfo,deleteUser,register } from '@/services/users'
 import { BasicListItemDataType } from './data';
-import { string } from 'prop-types';
-import { response } from 'express';
+import { showNotification } from '@/utils/common';
 
 export interface StateType {
   list: BasicListItemDataType[];
@@ -40,8 +38,7 @@ const Model: ModelType = {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(fetchUsers);
-      
+      const response = yield call(fetchUsers);  
       yield put({
         type: 'queryList',
         payload: {
@@ -56,22 +53,33 @@ const Model: ModelType = {
         nickname:response.data.nickname,
         username:response.data.username,
         sex:response.data.sex==1?'男':'女',
-        user_type:response.data.user_type==2?'普通用户':'管理员'
+        user_type:response.data.user_type==2?'普通用户':'拉黑'
       }
       yield put({
         type: 'infoList',
         payload: temp
       });
     },
+    *delete({ payload }, { call, put }) {
+      // const response = yield call(deleteUser, payload);
+    },
     *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
-      yield put({
-        type: 'appendList',
-        payload: {
-          userList:Array.isArray(response) ? response : [],
-          count:response.data.count,
-        }
-      });
+      try{
+        console.log(payload)
+        const response = yield call(register, payload.username,payload.password);
+        console.log(response)
+        if (response.status === 'ok') showNotification('success', '创建用户成功');
+      }catch(e){
+        showNotification('error', '创建失败，用户名已存在或服务器错误');
+      }
+      
+      // yield put({
+      //   type: 'appendList',
+      //   payload: {
+      //     userList:Array.isArray(response) ? response : [],
+      //     count:response.data.count,
+      //   }
+      // });
     },
     *submit({ payload }, { call, put }) {
       // let callback;

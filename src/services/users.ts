@@ -9,6 +9,18 @@ export async function fetchUsers() {
     
 }
 
+//注册用户register
+export async function register(username,password) {    
+    return request('/api/register', {
+        method: 'post',
+        data: {
+            username,
+            password,
+        },
+    });
+    
+}
+
 //获取用户列表
 export async function getUserInfo(userID) {    
     return request('/api/user/'+userID, {
@@ -27,6 +39,14 @@ export async function changeUserInfo(userID,nickname,sex,password,user_type) {
             password,
             user_type,
         }     
+    });
+    
+}
+
+//修改用户信息
+export async function deleteUser(userID) {    
+    return request('/api/user/'+userID, {
+        method: 'delete',   
     });
     
 }

@@ -84,9 +84,10 @@ const OperationModal: FC<OperationModalProps> = (props) => {
         <Form.Item
           name="username"
           label="用户邮箱"
-          rules={[{ required: true, message: '请输入用户邮箱' }]}
+          rules={[{ required: true,message: '请输入用户邮箱' }]}
         >
-          <Input placeholder="请输入" />
+          
+          <Input placeholder="请输入" disabled={current?true:false} />
         </Form.Item>
         <Form.Item
           name="nickname"
@@ -101,29 +102,46 @@ const OperationModal: FC<OperationModalProps> = (props) => {
           label="性别"
           rules={[{ required: true, message: '请输入用户性别' }]}
         >
-          <Input placeholder="请输入" />
+          <Select placeholder="请选择">
+            <Select.Option value="男">男</Select.Option>
+            <Select.Option value="女">女</Select.Option>
+          </Select>
 
         </Form.Item>
         <Form.Item
           name="password"
           label="用户密码"
           // 判断密码是否符合要求
-          rules={[({ getFieldValue }) => ({
+          rules={[{
+            required: current?false:true,
+            message: '密码不能为空',
+          },
+            ({ getFieldValue }) => ({
             validator(rule, value) {
               let l_flag=false,d_flag=false;
-                for (var i in value) {
-                    var asc = value.charCodeAt(i);
-                    if ((asc >= 65 && asc <= 90 || asc >= 97 && asc <= 122)) {
-                        l_flag=true;
-                    }
-                    if((asc>=48 && asc <=57)){
-                      d_flag=true;
-                    }
-                  }                
-              if (l_flag && d_flag || !value ) {
-                return Promise.resolve();
+              for (var i in value) {
+                  var asc = value.charCodeAt(i);
+                  if ((asc >= 65 && asc <= 90 || asc >= 97 && asc <= 122)) {
+                      l_flag=true;
+                  }
+                  if((asc>=48 && asc <=57)){
+                    d_flag=true;
+                  }
+              }  
+              if(current){
+                  if ((l_flag && d_flag &&value.length>=6)|| !value ) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('密码至少六位且包含字母和数字');
               }
-              return Promise.reject('密码至少六位且包含字母和数字');
+              else{
+                if ((l_flag && d_flag &&value.length>=6)|| !value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('密码至少六位且包含字母和数字');
+              }          
+              
+              
             },
           }) ]}
         >
@@ -141,8 +159,8 @@ const OperationModal: FC<OperationModalProps> = (props) => {
           rules={[{ required: true, message: '请选择用户权限' }]}
         >
           <Select placeholder="请选择">
-            <Select.Option value="管理员">管理员</Select.Option>
             <Select.Option value="普通用户">普通用户</Select.Option>
+            <Select.Option value="拉黑">拉黑</Select.Option>
           </Select>
         </Form.Item>
         {/* <Form.Item

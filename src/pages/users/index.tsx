@@ -5,9 +5,11 @@ import { findDOMNode } from 'react-dom';
 import { connect, Dispatch } from 'umi';
 import OperationModal from './components/OperationModal';
 import { BasicListItemDataType } from './data.d';
-import avatar from '@/assets/img/user.png';
+import admin from '@/assets/img/admin.png';
+import user from '@/assets/img/user.png';
 import styles from './style.less';
 const { Search } = Input;
+
 export interface StateType {
   list: BasicListItemDataType[];
   count: number;
@@ -32,22 +34,18 @@ const Info: FC<{
 );
 
 const ListContent = ({
-  data: { username, nickname, user_type, id },
+  data: { nickname, user_type },
 }: {
   data: BasicListItemDataType;
 }) => (
   <div className={styles.listContent}>
-    {/* <div className={styles.listContentItem}>
-     <span>编号</span>
-     <p>{id}</p>
-    </div> */}
     <div className={styles.listContentItem}>
       <span>昵称</span>
       <p>{nickname}</p>
     </div>
     <div className={styles.listContentItem}>
       <span>权限</span>
-      <p>{user_type == '2' ? 'normal user' : 'administrator'}</p>
+      <p>{user_type == '2' ? '普通用户' : '拉黑'}</p>
     </div>
   </div>
 );
@@ -61,7 +59,7 @@ export const BasicList: FC<BasicListProps> = props => {
   } = props;
   const [done, setDone] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const [current, setCurrent] = useState<Partial<BasicListItemDataType> | undefined>(undefined);
+  const [current, setCurrent] = useState<string | undefined>(undefined);
   useEffect(() => {
     //获取用户列表
     dispatch({
@@ -128,10 +126,18 @@ export const BasicList: FC<BasicListProps> = props => {
     const id = current ? current : '';
     setAddBtnblur();
     setDone(true); 
-    dispatch({
-      type: 'userList/submit',
-      payload: { id, ...values },
-    });
+    if(current){      
+      dispatch({
+        type: 'userList/submit',
+        payload: { id, ...values },
+      });
+    }
+    else{      
+      dispatch({
+        type: 'userList/appendFetch',
+        payload: {...values },
+      });
+    }
   };
 
   const getUserInfo = (values: string) => {
@@ -204,9 +210,9 @@ export const BasicList: FC<BasicListProps> = props => {
               >
                 <List.Item.Meta
                   className={styles.meta}
-                  avatar={<Avatar src={avatar} shape="square" size="small" />}
+                  avatar={<Avatar src={item.user_type=='2'?admin:user} shape="square" size="large" />}
                   title={<a className={styles.title}>{item.username}</a>}
-                />
+                />                
                 <ListContent data={item} />
               </List.Item>
             )}
