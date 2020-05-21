@@ -60,39 +60,58 @@ const Model: ModelType = {
         payload: temp
       });
     },
+
     *delete({ payload }, { call, put }) {
-      // const response = yield call(deleteUser, payload);
+      try{
+        const response = yield call(deleteUser, payload);   
+        console.log     
+        if (response.msg === 'success') showNotification('success', '删除用户成功');
+      }catch(e){
+        showNotification('error', '创建失败，用户已不存在或服务器错误');
+      }   
+      const response = yield call(fetchUsers);  
+      yield put({
+        type: 'queryList',
+        payload: {
+          userList:Array.isArray(response.data.res) ? response.data.res : [],
+          count:response.data.count,
+        }
+      });
     },
     *appendFetch({ payload }, { call, put }) {
       try{
         console.log(payload)
         const response = yield call(register, payload.username,payload.password);
         console.log(response)
-        if (response.status === 'ok') showNotification('success', '创建用户成功');
+        if (response.msg === 'success') showNotification('success', '创建用户成功');
       }catch(e){
         showNotification('error', '创建失败，用户名已存在或服务器错误');
       }
-      
-      // yield put({
-      //   type: 'appendList',
-      //   payload: {
-      //     userList:Array.isArray(response) ? response : [],
-      //     count:response.data.count,
-      //   }
-      // });
+      const response = yield call(fetchUsers);  
+      yield put({
+        type: 'queryList',
+        payload: {
+          userList:Array.isArray(response.data.res) ? response.data.res : [],
+          count:response.data.count,
+        }
+      });
     },
     *submit({ payload }, { call, put }) {
-      // let callback;
-      // if (payload.id) {
-      //   callback = Object.keys(payload).length === 1 ? removeFakeList : updateFakeList;
-      // } else {
-      //   callback = addFakeList;
-      // }
-      const response = yield call(changeUserInfo, payload.id,payload.nickname,payload.sex=='男'?1:2,payload.password,payload.user_type=='普通用户'?2:3); 
-      console.log(response);      
+      try{
+        const response = yield call(changeUserInfo, payload.id,payload.nickname,payload.sex=='男'?1:2,payload.password,payload.user_type=='普通用户'?2:3); 
+        console.log(response)
+        if (response.msg === 'success') showNotification('success', '用户信息修改成功');
+      }catch(e){
+        showNotification('error', e);
+      }
+      
+      const res = yield call(fetchUsers);  
       yield put({
-        type: 'changeState',
-        payload: response.msg,
+        type: 'queryList',
+        payload: {
+          userList:Array.isArray(res.data.res) ? res.data.res : [],
+          count:res.data.count,
+        }
       });
     },
   },

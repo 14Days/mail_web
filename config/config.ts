@@ -173,7 +173,8 @@ export default defineConfig({
                   name: 'basic',
                   icon: 'smile',
                   path: '/profile/basic',
-                  component: './profile/basic',
+                  // component: './profile/basic',
+                  component: './list/table-list',
                 },
                 {
                   name: 'advanced',

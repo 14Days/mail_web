@@ -1,6 +1,6 @@
 import React, { FC, useRef, useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Input, List, Avatar } from 'antd';
+import { Button, Card, Input, List, Avatar,Modal } from 'antd';
 import { findDOMNode } from 'react-dom';
 import { connect, Dispatch } from 'umi';
 import OperationModal from './components/OperationModal';
@@ -45,7 +45,7 @@ const ListContent = ({
     </div>
     <div className={styles.listContentItem}>
       <span>权限</span>
-      <p>{user_type == '2' ? '普通用户' : '拉黑'}</p>
+      <p>{user_type == '2' ? '普通用户' : '小黑屋'}</p>
     </div>
   </div>
 );
@@ -57,15 +57,19 @@ export const BasicList: FC<BasicListProps> = props => {
     dispatch,
     userList: { list, count },
   } = props;
+  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [done, setDone] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<string | undefined>(undefined);
+  const [userid, setUserid] = useState<string | undefined>(undefined)
+
   useEffect(() => {
     //获取用户列表
     dispatch({
       type: 'userList/fetch',
     });
   }, [1]);
+
   const paginationProps = {
     showSizeChanger: false,
     showQuickJumper: true,
@@ -83,13 +87,7 @@ export const BasicList: FC<BasicListProps> = props => {
     setCurrent(item);
   };
 
-  const deleteItem = (id: string) => {
-    // dispatch({
-    //   type: 'listAndbasicList/submit',
-    //   payload: { id },
-    // });
-  };
-
+ 
   const extraContent = (
     <div className={styles.extraContent}>
       <Search
@@ -108,19 +106,15 @@ export const BasicList: FC<BasicListProps> = props => {
     }
   };
 
-  const handleDone = () => {
-    setAddBtnblur();
-    setDone(false);
-    setVisible(false);
-    dispatch({
-      type: 'userList/fetch',
-    });
-  };
+
+  
 
   const handleCancel = () => {
     setAddBtnblur();
     setVisible(false);
   };
+  
+
 
   const handleSubmit = (values: BasicListItemDataType) => {
     const id = current ? current : '';
@@ -137,7 +131,8 @@ export const BasicList: FC<BasicListProps> = props => {
         type: 'userList/appendFetch',
         payload: {...values },
       });
-    }
+    }    
+    setVisible(false);
   };
 
   const getUserInfo = (values: string) => {
@@ -199,10 +194,11 @@ export const BasicList: FC<BasicListProps> = props => {
                     编辑
                   </a>,
                   <a
-                    key="delete" // onClick={(e) => {
-                    //   e.preventDefault();
-                    //   showEditModal(item);
-                    // }}
+                    key="delete" 
+                    onClick={e=> {
+                      handleModalVisible(true);
+                      setUserid(item.id)
+                    }}
                   >
                     删除
                   </a>,
@@ -225,10 +221,26 @@ export const BasicList: FC<BasicListProps> = props => {
         done={done}
         current={current}
         visible={visible}
-        onDone={handleDone}
         onCancel={handleCancel}
         onSubmit={handleSubmit}
       />
+      <Modal
+        destroyOnClose
+        title={'删除用户'}
+        visible={createModalVisible}
+        onOk={(value) => {          
+          dispatch({
+            type:'userList/delete',
+            payload:userid
+          });
+          handleModalVisible(false)
+        }}
+        onCancel={() => handleModalVisible(false)}
+        >
+          <p style={{textAlign:'center',fontSize:'16px'}}>
+              确定删除该用户？
+          </p>        
+      </Modal>
     </div>
   );
 };

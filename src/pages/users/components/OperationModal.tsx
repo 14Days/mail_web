@@ -64,21 +64,6 @@ const OperationModal: FC<OperationModalProps> = (props) => {
     : { okText: '保存', onOk: handleSubmit, onCancel };
 
   const getModalContent = () => {
-    if (done) {
-      return (
-        <Result
-          status="success"
-          title="信息修改成功"
-          // subTitle="一系列的信息描述，很短同样也可以带标点。"
-          extra={
-            <Button type="primary" onClick={onDone}>
-              好的
-            </Button>
-          }
-          className={styles.formResult}
-        />
-      );
-    }
     return (
       <Form {...formLayout} form={form} onFinish={handleFinish}>
         <Form.Item

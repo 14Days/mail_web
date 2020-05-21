@@ -30,11 +30,12 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         <FormItem
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 15 }}
-          label="描述"
+          // label="描述"
           name="desc"
-          rules={[{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }]}
+          // rules={[{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }]}
         >
-          <Input placeholder="请输入" />
+          <p>确定删除当前用户？</p>
+          {/* <Input placeholder="请输入" /> */}
         </FormItem>
       </Form>
     </Modal>
