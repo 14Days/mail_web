@@ -1,11 +1,11 @@
 import { Effect, Reducer } from 'umi';
-import { changeUserInfo,fetchUsers,getUserInfo,deleteUser,register } from '@/services/users'
+import { changeUserInfo,fetchUsers,getUserInfo,deleteUser,register,queryUser } from '@/services/users'
 import { BasicListItemDataType } from './data';
 import { showNotification } from '@/utils/common';
 
 export interface StateType {
   list: BasicListItemDataType[];
-  count: number;  
+  count: number;
   info:  Partial<BasicListItemDataType> | undefined;
   msg: string
 }
@@ -38,7 +38,7 @@ const Model: ModelType = {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(fetchUsers);  
+      const response = yield call(fetchUsers);
       yield put({
         type: 'queryList',
         payload: {
@@ -61,15 +61,28 @@ const Model: ModelType = {
       });
     },
 
+    *query({ payload }, { call, put }) {
+      console.log(payload)
+      const response = yield call(queryUser, payload);
+      console.log(response)
+      yield put({
+        type: 'queryList',
+        payload: {
+          userList:Array.isArray(response.data.res) ? response.data.res : [],
+          count:response.data.count,
+        }
+      });
+    },
+
     *delete({ payload }, { call, put }) {
       try{
-        const response = yield call(deleteUser, payload);   
-        console.log     
+        const response = yield call(deleteUser, payload);
+        console.log
         if (response.msg === 'success') showNotification('success', '删除用户成功');
       }catch(e){
         showNotification('error', '创建失败，用户已不存在或服务器错误');
-      }   
-      const response = yield call(fetchUsers);  
+      }
+      const response = yield call(fetchUsers);
       yield put({
         type: 'queryList',
         payload: {
@@ -87,7 +100,7 @@ const Model: ModelType = {
       }catch(e){
         showNotification('error', '创建失败，用户名已存在或服务器错误');
       }
-      const response = yield call(fetchUsers);  
+      const response = yield call(fetchUsers);
       yield put({
         type: 'queryList',
         payload: {
@@ -98,14 +111,14 @@ const Model: ModelType = {
     },
     *submit({ payload }, { call, put }) {
       try{
-        const response = yield call(changeUserInfo, payload.id,payload.nickname,payload.sex=='男'?1:2,payload.password,payload.user_type=='普通用户'?2:3); 
+        const response = yield call(changeUserInfo, payload.id,payload.nickname,payload.sex=='男'?1:2,payload.password,payload.user_type=='普通用户'?2:3);
         console.log(response)
         if (response.msg === 'success') showNotification('success', '用户信息修改成功');
       }catch(e){
         showNotification('error', e);
       }
-      
-      const res = yield call(fetchUsers);  
+
+      const res = yield call(fetchUsers);
       yield put({
         type: 'queryList',
         payload: {

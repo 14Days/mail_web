@@ -7,13 +7,17 @@ import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
 import { TableListItem } from './data.d';
 import { queryRule, updateRule, addRule, removeRule } from './service';
-
 /**
  * 添加节点
  * @param fields
  */
+
+import StatisticCard from './StatisticCard';
+import CommentBasic from './CommentBasic';
+
 const handleAdd = async (fields: FormValueType) => {
   const hide = message.loading('正在添加');
+
   try {
     await addRule({
       desc: fields.desc,
@@ -27,13 +31,14 @@ const handleAdd = async (fields: FormValueType) => {
     return false;
   }
 };
-
 /**
  * 更新节点
  * @param fields
  */
+
 const handleUpdate = async (fields: FormValueType) => {
   const hide = message.loading('正在配置');
+
   try {
     await updateRule({
       name: fields.name,
@@ -41,7 +46,6 @@ const handleUpdate = async (fields: FormValueType) => {
       key: fields.key,
     });
     hide();
-
     message.success('配置成功');
     return true;
   } catch (error) {
@@ -50,17 +54,18 @@ const handleUpdate = async (fields: FormValueType) => {
     return false;
   }
 };
-
 /**
  *  删除节点
  * @param selectedRows
  */
+
 const handleRemove = async (selectedRows: TableListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
+
   try {
     await removeRule({
-      key: selectedRows.map((row) => row.key),
+      key: selectedRows.map(row => row.key),
     });
     hide();
     message.success('删除成功，即将刷新');
@@ -91,8 +96,7 @@ const TableList: React.FC<{}> = () => {
       dataIndex: 'callNo',
       sorter: true,
       renderText: (val: string) => `${val} 万`,
-    },
-    // },
+    }, // },
     // {
     //   title: '状态',
     //   dataIndex: 'status',
@@ -129,9 +133,10 @@ const TableList: React.FC<{}> = () => {
       ),
     },
   ];
-
   return (
     <PageHeaderWrapper>
+      <StatisticCard />
+      <CommentBasic />
       <ProTable<TableListItem>
         headerTitle="查询表格"
         actionRef={actionRef}
@@ -144,7 +149,7 @@ const TableList: React.FC<{}> = () => {
             <Dropdown
               overlay={
                 <Menu
-                  onClick={async (e) => {
+                  onClick={async e => {
                     if (e.key === 'remove') {
                       await handleRemove(selectedRows);
                       action.reload();
@@ -165,21 +170,31 @@ const TableList: React.FC<{}> = () => {
         ]}
         tableAlertRender={({ selectedRowKeys, selectedRows }) => (
           <div>
-            已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
+            已选择{' '}
+            <a
+              style={{
+                fontWeight: 600,
+              }}
+            >
+              {selectedRowKeys.length}
+            </a>{' '}
+            项&nbsp;&nbsp;
             <span>
               服务调用次数总计 {selectedRows.reduce((pre, item) => pre + item.callNo, 0)} 万
             </span>
           </div>
         )}
-        request={(params) => queryRule(params)}
+        request={params => queryRule(params)}
         columns={columns}
         rowSelection={{}}
       />
       <CreateForm
-        onSubmit={async (value) => {
+        onSubmit={async value => {
           const success = await handleAdd(value);
+
           if (success) {
             handleModalVisible(false);
+
             if (actionRef.current) {
               actionRef.current.reload();
             }
@@ -190,11 +205,13 @@ const TableList: React.FC<{}> = () => {
       />
       {stepFormValues && Object.keys(stepFormValues).length ? (
         <UpdateForm
-          onSubmit={async (value) => {
+          onSubmit={async value => {
             const success = await handleUpdate(value);
+
             if (success) {
               handleModalVisible(false);
               setStepFormValues({});
+
               if (actionRef.current) {
                 actionRef.current.reload();
               }

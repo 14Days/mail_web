@@ -49,4 +49,6 @@ export default {
   'menu.editor.flow': 'Flow Editor',
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
+  'menu.用户管理': 'User Manage',
+  'menu.邮件列表': 'Mail List',
 };

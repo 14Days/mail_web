@@ -165,24 +165,26 @@ export default defineConfig({
               // ],
             },
             {
-              path: '/profile',
-              name: 'profile',
-              icon: 'profile',
-              routes: [
-                {
-                  name: 'basic',
-                  icon: 'smile',
-                  path: '/profile/basic',
-                  // component: './profile/basic',
-                  component: './list/table-list',
-                },
-                {
-                  name: 'advanced',
-                  icon: 'smile',
-                  path: '/profile/advanced',
-                  component: './profile/advanced',
-                },
-              ],
+              path: '/emails',
+              name: '邮件列表',
+              icon: 'mail',
+              component: './emails',
+              // routes: [
+              //   {
+              //     name: 'basic',
+              //     icon: 'smile',
+              //     path: '/profile/basic',
+              //     // component: './profile/basic',
+              //     component: './list/table-list',
+              //   },
+              //   {
+              //     name: 'advanced',
+              //     icon: 'mail',
+              //     path: '/profile/advanced',
+              //     // component: './profile/advanced',
+              //     component: './emails',
+              //   },
+              // ],
             },
             {
               name: 'result',

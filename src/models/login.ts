@@ -39,6 +39,8 @@ const Model: LoginModelType = {
     *userlogin({ payload }, { call, put }) {
       const { adminname, adminpwd } = payload;
       const response = yield call(login, adminname, adminpwd);
+      console.log(response);
+      
       if (response.msg === 'success') {
         message.success('登录成功！');
         yield put({

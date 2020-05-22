@@ -59,9 +59,9 @@ const OperationModal: FC<OperationModalProps> = (props) => {
     }
   };
 
-  const modalFooter = done
-    ? { footer: null, onCancel: onDone }
-    : { okText: '保存', onOk: handleSubmit, onCancel };
+  const modalFooter = current
+    ? {  okText: '保存', onOk: handleSubmit, onCancel  }
+    : { okText: '确定', onOk: handleSubmit, onCancel };
 
   const getModalContent = () => {
     return (

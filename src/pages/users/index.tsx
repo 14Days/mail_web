@@ -5,7 +5,7 @@ import { findDOMNode } from 'react-dom';
 import { connect, Dispatch } from 'umi';
 import OperationModal from './components/OperationModal';
 import { BasicListItemDataType } from './data.d';
-import admin from '@/assets/img/admin.png';
+import blackhouse from '@/assets/img/blackhouse.png';
 import user from '@/assets/img/user.png';
 import styles from './style.less';
 const { Search } = Input;
@@ -72,8 +72,8 @@ export const BasicList: FC<BasicListProps> = props => {
 
   const paginationProps = {
     showSizeChanger: false,
-    showQuickJumper: true,
-    pageSize: 5,
+    showQuickJumper: false,
+    pageSize: 6,
     total: count,
   };
 
@@ -93,7 +93,12 @@ export const BasicList: FC<BasicListProps> = props => {
       <Search
         className={styles.extraContentSearch}
         placeholder="请输入用户邮箱"
-        onSearch={() => ({})}
+        onSearch={(value) => {
+          dispatch({
+            type:'userList/query',
+            payload:value
+          })
+        }}
       />
     </div>
   );
@@ -206,8 +211,8 @@ export const BasicList: FC<BasicListProps> = props => {
               >
                 <List.Item.Meta
                   className={styles.meta}
-                  avatar={<Avatar src={item.user_type=='2'?admin:user} shape="square" size="large" />}
-                  title={<a className={styles.title}>{item.username}</a>}
+                  avatar={<Avatar src={item.user_type=='2'?user:blackhouse} shape="square" size="large" />}
+                  title={<a className={styles.title}>{item.username}@wghtstudio.cn</a>}
                 />                
                 <ListContent data={item} />
               </List.Item>
