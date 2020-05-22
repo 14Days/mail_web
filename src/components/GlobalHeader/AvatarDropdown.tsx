@@ -1,4 +1,4 @@
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined, StarTwoTone,SettingTwoTone } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
 import { ClickParam } from 'antd/es/menu';
 import React from 'react';
@@ -7,6 +7,7 @@ import { ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import admin from '@/assets/img/admin.png'
 
 export interface GlobalHeaderRightProps extends Partial<ConnectProps> {
   currentUser?: CurrentUser;
@@ -33,24 +34,24 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   };
 
   render(): React.ReactNode {
+    const currentUser = {
+      avatar: admin,
+      name: sessionStorage.getItem('nickname'),
+    };
     const {
-      currentUser = {
-        avatar: '',
-        name: '',
-      },
       menu,
     } = this.props;
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         {menu && (
           <Menu.Item key="center">
-            <UserOutlined />
+            <StarTwoTone />
             个人中心
           </Menu.Item>
         )}
         {menu && (
           <Menu.Item key="settings">
-            <SettingOutlined />
+            <SettingTwoTone />
             个人设置
           </Menu.Item>
         )}

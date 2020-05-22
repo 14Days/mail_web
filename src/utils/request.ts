@@ -4,6 +4,8 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import { stringify } from 'querystring';
+import { history, Reducer, Effect } from 'umi';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -26,24 +28,25 @@ const codeMessage = {
 /**
  * 异常处理程序
  */
-const errorHandler = (error: { response: Response }): Response => {
-  const { response } = error;
-  if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+// const errorHandler = (error: { response: Response }): Response => {
+//   const { response } = error;
+//   if (response && response.status) {
+//     const errorText = codeMessage[response.status] || response.statusText;
+//     const { status, url } = response;
 
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
-  } else if (!response) {
-    notification.error({
-      description: '您的网络发生异常，无法连接服务器',
-      message: '网络异常',
-    });
-  }
-  return response;
-};
+//     notification.error({
+//       message: `请求错误 ${status}: ${url}`,
+//       description: errorText,
+//     });
+//   } else if (!response) {
+//     notification.error({
+//       description: '您的网络发生异常，无法连接服务器',
+//       message: '网络异常',
+//     });    
+//   }
+//   history.replace('/admin/login');
+//   return response;
+// };
 
 /**
  * 配置request请求时的默认参数
@@ -51,7 +54,7 @@ const errorHandler = (error: { response: Response }): Response => {
 
 const request = extend({
 
-  errorHandler, // 默认错误处理  
+  // errorHandler, // 默认错误处理  
   credentials: 'include', // 默认请求是否带上cookie
 
 });
@@ -60,7 +63,6 @@ const request = extend({
 
 //添加拦截钩子
 request.interceptors.request.use((url, options) => {
-  console.log(url)
   let token = localStorage.getItem("token");
   const headers = {
     'Access-Control-Allow-Origin': '*',

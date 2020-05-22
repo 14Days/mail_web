@@ -1,6 +1,6 @@
 import { stringify } from 'querystring';
 import { history, Reducer, Effect } from 'umi';
-
+import {getUserInfo} from '@/services/users'
 import { message } from 'antd';
 import { login } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
@@ -38,9 +38,7 @@ const Model: LoginModelType = {
   effects: {
     *userlogin({ payload }, { call, put }) {
       const { adminname, adminpwd } = payload;
-      const response = yield call(login, adminname, adminpwd);
-      console.log(response);
-      
+      const response = yield call(login, adminname, adminpwd);      
       if (response.msg === 'success') {
         message.success('登录成功！');
         yield put({
@@ -52,6 +50,12 @@ const Model: LoginModelType = {
           }
         });
         localStorage.setItem('token', response.data.token)
+        sessionStorage.setItem('username',adminname)
+        sessionStorage.setItem('password',adminpwd)
+        const personalData = yield call(getUserInfo, 1);
+        console.log(personalData);
+        sessionStorage.setItem('nickname',personalData.data.nickname)
+        sessionStorage.setItem('sex',personalData.data.sex=='1'?'男':'女')
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -78,6 +82,9 @@ const Model: LoginModelType = {
     logout() {
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note
+      localStorage.setItem('token', '')      
+      sessionStorage.setItem('username','')
+      sessionStorage.setItem('password','')
       if (window.location.pathname !== '/admin/login' && !redirect) {
         history.replace({
           pathname: '/admin/login',

@@ -10,6 +10,7 @@ import Articles from './components/Articles';
 import Applications from './components/Applications';
 import { CurrentUser, TagType } from './data.d';
 import styles from './Center.less';
+import admin from '@/assets/img/admin.svg'
 
 const operationTabList = [
   {
@@ -47,58 +48,18 @@ interface CenterState {
   tabKey?: 'articles' | 'applications' | 'projects';
 }
 
-const TagList: React.FC<{ tags: CurrentUser['tags'] }> = ({ tags }) => {
+const TagList: React.FC = () => {
   const ref = useRef<Input | null>(null);
   const [newTags, setNewTags] = useState<TagType[]>([]);
-  const [inputVisible, setInputVisible] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
-
-  const showInput = () => {
-    setInputVisible(true);
-    if (ref.current) {
-      // eslint-disable-next-line no-unused-expressions
-      ref.current?.focus();
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleInputConfirm = () => {
-    let tempsTags = [...newTags];
-    if (inputValue && tempsTags.filter((tag) => tag.label === inputValue).length === 0) {
-      tempsTags = [...tempsTags, { key: `new-${tempsTags.length}`, label: inputValue }];
-    }
-    setNewTags(tempsTags);
-    setInputVisible(false);
-    setInputValue('');
-  };
 
   return (
     <div className={styles.tags}>
       <div className={styles.tagsTitle}>标签</div>
-      {(tags || []).concat(newTags).map((item) => (
-        <Tag key={item.key}>{item.label}</Tag>
-      ))}
-      {inputVisible && (
-        <Input
-          ref={ref}
-          type="text"
-          size="small"
-          style={{ width: 78 }}
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      )}
-      {!inputVisible && (
-        <Tag onClick={showInput} style={{ borderStyle: 'dashed' }}>
-          <PlusOutlined />
-        </Tag>
-      )}
-    </div>
+      <p style={{textAlign:'center'}}>
+        一位致力于提供优质服务的管理员
+      </p>
+      </div>
   );
 };
 
@@ -159,7 +120,7 @@ class Center extends Component<CenterProps, CenterState> {
     return null;
   };
 
-  renderUserInfo = (currentUser: Partial<CurrentUser>) => (
+  renderUserInfo = () => (
     <div className={styles.detail}>
       <p>
         <ContactsOutlined
@@ -167,7 +128,7 @@ class Center extends Component<CenterProps, CenterState> {
             marginRight: 8,
           }}
         />
-        {currentUser.title}
+        邮箱：{sessionStorage.getItem('username')}@wghtstudio.cn
       </p>
       <p>
         <ClusterOutlined
@@ -175,7 +136,7 @@ class Center extends Component<CenterProps, CenterState> {
             marginRight: 8,
           }}
         />
-        {currentUser.group}
+        性别：{sessionStorage.getItem('sex')}
       </p>
       <p>
         <HomeOutlined
@@ -183,53 +144,34 @@ class Center extends Component<CenterProps, CenterState> {
             marginRight: 8,
           }}
         />
-        {(currentUser.geographic || { province: { label: '' } }).province.label}
-        {
-          (
-            currentUser.geographic || {
-              city: {
-                label: '',
-              },
-            }
-          ).city.label
-        }
+        城市：湖南省长沙市
       </p>
     </div>
   );
 
   render() {
     const { tabKey } = this.state;
-    const { currentUser = {}, currentUserLoading } = this.props;
-    const dataLoading = currentUserLoading || !(currentUser && Object.keys(currentUser).length);
     return (
       <GridContent>
         <Row gutter={24}>
           <Col lg={7} md={24}>
-            <Card bordered={false} style={{ marginBottom: 24 }} loading={dataLoading}>
-              {!dataLoading && (
+            <Card bordered={false} style={{ marginBottom: 24 }} >
+              { (
                 <div>
                   <div className={styles.avatarHolder}>
-                    <img alt="" src={currentUser.avatar} />
-                    <div className={styles.name}>{currentUser.name}</div>
-                    <div>{currentUser.signature}</div>
+                    <img alt="" src={admin} />
+                    <div className={styles.name}>{sessionStorage.getItem('nickname')}</div>
+                    <div>素处以默，妙机其微。柳阴路曲，流莺比邻。</div>
                   </div>
-                  {this.renderUserInfo(currentUser)}
+                  {this.renderUserInfo()}
                   <Divider dashed />
-                  <TagList tags={currentUser.tags || []} />
+                  <TagList  />
                   <Divider style={{ marginTop: 16 }} dashed />
                   <div className={styles.team}>
                     <div className={styles.teamTitle}>团队</div>
-                    <Row gutter={36}>
-                      {currentUser.notice &&
-                        currentUser.notice.map((item) => (
-                          <Col key={item.id} lg={24} xl={12}>
-                            <Link to={item.href}>
-                              <Avatar size="small" src={item.logo} />
-                              {item.member}
-                            </Link>
-                          </Col>
-                        ))}
-                    </Row>
+                    <p style={{textAlign:'center'}}>
+                        湖南大学软件1703班计网p小组
+                    </p>
                   </div>
                 </div>
               )}

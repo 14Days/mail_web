@@ -31,7 +31,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
 
   return (
     <div className={className}>
-      <HeaderSearch
+      {/* <HeaderSearch
         className={`${styles.action} ${styles.search}`}
         placeholder="站内搜索"
         defaultValue="umi ui"
@@ -66,14 +66,14 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
           <QuestionCircleOutlined />
         </a>
       </Tooltip>
-      <NoticeIconView />
+      <NoticeIconView /> */}
       <Avatar menu />
-      {REACT_APP_ENV && (
-        <span>
+      {REACT_APP_ENV &&
+       (<span>
           <Tag color={ENVTagColor[REACT_APP_ENV]}>{REACT_APP_ENV}</Tag>
-        </span>
-      )}
-      <SelectLang className={styles.action} />
+        </span>)
+      }
+      <div className={styles.action} />
     </div>
   );
 };

@@ -94,10 +94,17 @@ export const BasicList: FC<BasicListProps> = props => {
         className={styles.extraContentSearch}
         placeholder="请输入用户邮箱"
         onSearch={(value) => {
-          dispatch({
-            type:'userList/query',
-            payload:value
-          })
+          if(value){
+            dispatch({
+              type:'userList/query',
+              payload:value
+            })
+          }
+          else{
+            dispatch({
+              type:'userList/fetch',
+            })
+          }
         }}
       />
     </div>

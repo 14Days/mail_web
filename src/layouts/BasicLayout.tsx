@@ -63,20 +63,20 @@ const defaultFooterDom = (
     links={[
       {
         key: 'Ant Design Pro',
-        title: '邮箱管理系统',
-        href: 'https://pro.ant.design',
+        title: '14Days',
+        href: '',
         blankTarget: true,
       },
       {
         key: 'github',
         title: <GithubOutlined />,
-        href: 'https://github.com/ant-design/ant-design-pro',
+        href: 'https://github.com/14Days/mail_web',
         blankTarget: true,
       },
       {
         key: 'Ant Design',
-        title: '邮箱管理系统',
-        href: 'https://ant.design',
+        title: 'Mail',
+        href: '',
         blankTarget: true,
       },
     ]}

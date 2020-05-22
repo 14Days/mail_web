@@ -111,9 +111,9 @@ export default defineConfig({
             },
             {
               path: '/users',
-              icon: 'user',
+              icon: 'ContactsTwoTone',
               name: '用户管理',
-              component: './users', 
+              component: './users',
               // routes: [
               //   {
               //     path: '/users/search',
@@ -167,7 +167,7 @@ export default defineConfig({
             {
               path: '/emails',
               name: '邮件列表',
-              icon: 'mail',
+              icon: 'MailTwoTone',
               component: './emails',
               // routes: [
               //   {
@@ -232,18 +232,18 @@ export default defineConfig({
             },
             {
               name: 'account',
-              icon: 'user',
+              icon: 'ProfileTwoTone',
               path: '/account',
               routes: [
                 {
                   name: 'center',
-                  icon: 'smile',
+                  icon: 'StarTwoTone',
                   path: '/account/center',
                   component: './account/center',
                 },
                 {
                   name: 'settings',
-                  icon: 'smile',
+                  icon: 'SettingTwoTone',
                   path: '/account/settings',
                   component: './account/settings',
                 },

@@ -1,13 +1,13 @@
 import { DefaultFooter, MenuDataItem, getMenuData, getPageTitle } from '@ant-design/pro-layout';
 import { Link, useIntl, ConnectProps, connect } from 'umi';
 import React from 'react';
-import SelectLang from '@/components/SelectLang';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { ConnectState } from '@/models/connect';
 import image from './img/img3.svg'
 import mailbox from './img/mailbox.svg'
 import avatar from './img/avatar.svg'
 import styles from './UserLayout.less'; 
-import { PageHeader, Button } from 'antd';
+import { PageHeader, Button,Tooltip } from 'antd';
 
 
 export interface UserLayoutProps extends Partial<ConnectProps> {
@@ -44,12 +44,16 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
         title="Mail Manage System"
         className="site-page-header"
         extra={[
-          <a key="2" >
-            help
-            </a>,
-          <a key="1" >
-            feedback
-            </a>
+          <Tooltip title="使用文档">
+            <a
+              target="_blank"
+              href=""
+              rel="noopener noreferrer"
+              className={styles.action}
+            >
+            <QuestionCircleOutlined />
+          </a>
+          </Tooltip>
         ]}
         avatar={{ src:mailbox }}
       >
