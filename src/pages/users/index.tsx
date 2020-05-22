@@ -1,13 +1,15 @@
 import React, { FC, useRef, useState, useEffect } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined,BellOutlined } from '@ant-design/icons';
 import { Button, Card, Input, List, Avatar,Modal } from 'antd';
 import { findDOMNode } from 'react-dom';
 import { connect, Dispatch } from 'umi';
 import OperationModal from './components/OperationModal';
+import NoticeModal from './components/NoticeModal';
 import { BasicListItemDataType } from './data.d';
 import blackhouse from '@/assets/img/blackhouse.png';
 import user from '@/assets/img/user.png';
 import styles from './style.less';
+import User from '@/assets/img/user.svg'
 const { Search } = Input;
 
 export interface StateType {
@@ -61,7 +63,8 @@ export const BasicList: FC<BasicListProps> = props => {
   const [done, setDone] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<string | undefined>(undefined);
-  const [userid, setUserid] = useState<string | undefined>(undefined)
+  const [userid, setUserid] = useState<string | undefined>(undefined);
+  const [NoticeModalVisible,setModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     //获取用户列表
@@ -89,11 +92,11 @@ export const BasicList: FC<BasicListProps> = props => {
 
  
   const extraContent = (
-    <div className={styles.extraContent}>
+    <div className={styles.extraContent}>      
       <Search
         className={styles.extraContentSearch}
         placeholder="请输入用户邮箱"
-        onSearch={(value) => {
+        onSearch={(value) => {          
           if(value){
             dispatch({
               type:'userList/query',
@@ -107,6 +110,12 @@ export const BasicList: FC<BasicListProps> = props => {
           }
         }}
       />
+      <Button icon={<BellOutlined /> } 
+          className={styles.extraContentButton} type="primary"
+          onClick={()=>{setModalVisible(true)}}
+      >
+            发送通知
+      </Button>
     </div>
   );
 
@@ -146,6 +155,17 @@ export const BasicList: FC<BasicListProps> = props => {
     }    
     setVisible(false);
   };
+  const handleNotice = (values: BasicListItemDataType) => {
+    setAddBtnblur();   
+    console.log(values);
+    
+      dispatch({
+        type: 'email/sendemails',
+        payload: {...values },
+      });
+      setModalVisible(false);
+    }    
+
 
   const getUserInfo = (values: string) => {
     dispatch({
@@ -159,17 +179,13 @@ export const BasicList: FC<BasicListProps> = props => {
       <div className={styles.standardList}>
         {/* 用户列表 */}
         <Card
-          className={styles.listCard}
+          className={styles.cardTitle}
           bordered={false}
-          title={<a className={styles.cardTitle}>用户管理</a>}
+          title={<a className={styles.cardTitle}><img src={User} style={{marginRight:"10px"}}></img>用户管理</a>}
           style={{
-            marginTop: 34,
-            marginLeft: 24,
-            marginRight: 24,
-          }}
-          bodyStyle={{
-            padding: '0 32px 40px 32px',
-          }}
+            marginTop: 24,
+          }}          
+          bodyStyle={{ padding: '32px 32px 32px 32px' }}
           extra={extraContent}
         >
           <Button
@@ -253,6 +269,11 @@ export const BasicList: FC<BasicListProps> = props => {
               确定删除该用户？
           </p>        
       </Modal>
+      <NoticeModal
+        visible={NoticeModalVisible}
+        onCancel={()=>{setModalVisible(false)}}
+        onSubmit={handleNotice}
+        />
     </div>
   );
 };

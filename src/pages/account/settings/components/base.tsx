@@ -2,11 +2,11 @@ import { UploadOutlined } from '@ant-design/icons';
 import { Button, Input, Select, Upload, Form, message } from 'antd';
 import { connect, FormattedMessage, formatMessage } from 'umi';
 import React, { Component } from 'react';
-
 import { CurrentUser } from '../data.d';
 import GeographicView from './GeographicView';
 import PhoneView from './PhoneView';
 import styles from './BaseView.less';
+import admin from '@/assets/img/admin.svg'
 
 const { Option } = Select;
 
@@ -17,9 +17,9 @@ const AvatarView = ({ avatar }: { avatar: string }) => (
       <FormattedMessage id="accountandsettings.basic.avatar" defaultMessage="Avatar" />
     </div>
     <div className={styles.avatar}>
-      <img src={avatar} alt="avatar" />
+      <img src={admin} alt="avatar" />
     </div>
-    <Upload showUploadList={false}>
+    {/* <Upload showUploadList={false}>
       <div className={styles.button_view}>
         <Button>
           <UploadOutlined />
@@ -29,7 +29,7 @@ const AvatarView = ({ avatar }: { avatar: string }) => (
           />
         </Button>
       </div>
-    </Upload>
+    </Upload> */}
   </>
 );
 interface SelectItem {
@@ -108,12 +108,7 @@ class BaseView extends Component<BaseViewProps> {
             <Form.Item
               name="email"
               label={formatMessage({ id: 'accountandsettings.basic.email' })}
-              rules={[
-                {
-                  required: true,
-                  message: formatMessage({ id: 'accountandsettings.basic.email-message' }, {}),
-                },
-              ]}
+              
             >
               <Input />
             </Form.Item>

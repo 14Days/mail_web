@@ -1,12 +1,13 @@
 import React, { FC, useEffect } from 'react';
 import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
-import { LoadingOutlined, StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons';
+import { LoadingOutlined, StarOutlined, LikeOutlined, MessageOutlined,MailOutlined } from '@ant-design/icons';
 import { connect, Dispatch } from 'umi';
 import ArticleListContent from './components/ArticleListContent';
 import { StateType } from './model';
 import { ListItemDataType } from './data.d';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
+import mail from '@/assets/img/mail.svg'
 import styles from './style.less';
 
 const { Option } = Select;
@@ -124,7 +125,8 @@ const Articles: FC<ArticlesProps> = ({ dispatch, listAndsearchAndarticles: { lis
     <>
       
       <Card
-        style={{ textAlign: 'center',marginTop: 24 }}
+        title={<a className={styles.cardTitle}><img alt="mail" src={mail} style={{marginRight:"10px"}}></img>邮件列表</a>}
+        style={{ marginTop: 24 }}
         bordered={false}
         bodyStyle={{ padding: '32px 32px 32px 32px' }}
       >
@@ -148,16 +150,20 @@ const Articles: FC<ArticlesProps> = ({ dispatch, listAndsearchAndarticles: { lis
               <List.Item.Meta
                 title={
                   <a className={styles.listItemMetaTitle} href={item.href}>
-                    {item.title}
+                    <MailOutlined style={{marginRight:"10px"}} />
+                      {item.title}
+                  <span style={{marginLeft:"15px"}}>
+                    <Tag>已读</Tag>
+                  </span>
                   </a>
                 }
-                description={
-                  <span>
-                    <Tag>Ant Design</Tag>
-                    <Tag>设计语言</Tag>
-                    <Tag>蚂蚁金服</Tag>
-                  </span>
-                }
+                // description={
+                //   <span>
+                //     <Tag>已读</Tag>
+                //     {/* <Tag>设计语言</Tag>
+                //     <Tag>蚂蚁金服</Tag> */}
+                //   </span>
+                // }
               />
               <ArticleListContent data={item} />
             </List.Item>
