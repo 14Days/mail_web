@@ -33,6 +33,8 @@ const Model: EmailModelType = {
     *fetch({ payload }, { call, put }) {
       try{
         const response = yield call(getEmails)
+        console.log(response);
+        
         let mails=response.data.res;
         let i=0,len=mails.length;
         let msg=response.msg;
@@ -43,7 +45,7 @@ const Model: EmailModelType = {
           mails[i]["content"]=res.data.content
           mails[i]["from_addr"]=res.data.from_addr
           mails[i]["to_addr"]=res.data.to_addr.length>1?'所有用户':res.data.to_addr
-          
+          mails[i]["title"]=res.data.subject
         }     
         yield put({
           type: 'queryList',

@@ -16,7 +16,7 @@ export async function sendEmails(content,subject) {
 
 //获取邮件列表
 export async function getEmails() {
-    return request('/api/mail/receive', {
+    return request('/api/mail/send', {
         method: 'get',
     });
 
@@ -24,7 +24,7 @@ export async function getEmails() {
 
 //获取邮件详情
 export async function getEmailInfo(mailID) {
-    return request('/api/mail/receive/'+mailID, {
+    return request('/api/mail/send/'+mailID, {
         method: 'get',
     });
 
@@ -32,7 +32,7 @@ export async function getEmailInfo(mailID) {
 
 //删除邮件
 export async function deleteEmail(mailID) {
-    return request('/api/mail/receive/'+mailID, {
+    return request('/api/mail/send/'+mailID, {
         method: 'delete',
     });
 

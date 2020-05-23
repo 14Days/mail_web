@@ -115,7 +115,7 @@ const Articles: FC<ArticlesProps> = ({ dispatch, email: { list }, loading }) => 
                     <MailOutlined style={{marginRight:"10px"}} />
                       {item.title}
                   <span style={{marginLeft:"15px"}}>
-                    <Tag color={item.is_read?'blue':'red'}>{item.is_read?'已读':'未读'}</Tag>
+                    {/* <Tag color={item.is_read?'blue':'red'}>{item.is_read?'已读':'未读'}</Tag> */}
                   </span>
                   </a>
                 }
