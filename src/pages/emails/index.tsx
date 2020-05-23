@@ -1,5 +1,5 @@
-import React, { FC, useEffect } from 'react';
-import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
+import React, { FC, useEffect, useState } from 'react';
+import { Button, Card, Col, Form, List, Row, Select, Tag, Modal } from 'antd';
 import { LoadingOutlined, StarOutlined, LikeOutlined, MessageOutlined,MailOutlined } from '@ant-design/icons';
 import { connect, Dispatch } from 'umi';
 import ArticleListContent from './components/ArticleListContent';
@@ -26,24 +26,14 @@ interface ArticlesProps {
   loading: boolean;
 }
 const Articles: FC<ArticlesProps> = ({ dispatch, email: { list }, loading }) => {
-  console.log(list);
   
-  const [form] = Form.useForm();
+  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   useEffect(() => {
     dispatch({
       type: 'email/fetch',
       payload: '2'
     });
   }, []);
-
-  const fetchMore = () => {
-    dispatch({
-      type: 'listAndsearchAndarticles/appendFetch',
-      payload: {
-        count: pageSize,
-      },
-    });
-  };
 
 
   const IconText: React.FC<{
@@ -125,7 +115,7 @@ const Articles: FC<ArticlesProps> = ({ dispatch, email: { list }, loading }) => 
                     <MailOutlined style={{marginRight:"10px"}} />
                       {item.title}
                   <span style={{marginLeft:"15px"}}>
-                    <Tag>已读</Tag>
+                    <Tag color={item.is_read?'blue':'red'}>{item.is_read?'已读':'未读'}</Tag>
                   </span>
                   </a>
                 }
@@ -135,6 +125,23 @@ const Articles: FC<ArticlesProps> = ({ dispatch, email: { list }, loading }) => 
           )}
         />
       </Card>
+      <Modal
+        destroyOnClose
+        title={'删除用户'}
+        visible={createModalVisible}
+        onOk={(value) => {          
+          dispatch({
+            type:'userList/delete',
+            payload:mail_id
+          });
+          handleModalVisible(false)
+        }}
+        onCancel={() => handleModalVisible(false)}
+        >
+          <p style={{textAlign:'center',fontSize:'16px'}}>
+              确定删除该邮件？
+          </p>        
+      </Modal>
     </>
   );
 };
