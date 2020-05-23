@@ -231,23 +231,30 @@ export default defineConfig({
               ],
             },
             {
-              name: 'account',
-              icon: 'ProfileTwoTone',
-              path: '/account',
-              routes: [
-                {
-                  name: 'center',
-                  icon: 'StarTwoTone',
-                  path: '/account/center',
-                  component: './account/center',
-                },
-                {
-                  name: 'settings',
-                  icon: 'SettingTwoTone',
-                  path: '/account/settings',
-                  component: './account/settings',
-                },
-              ],
+              name: 'settings',
+              icon: 'SettingTwoTone',
+              path: '/settings',
+              component: './account/settings',
+              // routes: [
+              //   {
+              //     name: 'center',
+              //     icon: 'StarTwoTone',
+              //     path: '/account/center',
+              //     component: './account/center',
+              //   },
+              //   {
+              //     name: 'settings',
+              //     icon: 'SettingTwoTone',
+              //     path: '/account/settings',
+              //     component: './account/settings',
+              //   },
+              // ],
+            },
+            {
+              name: 'center',
+              icon: 'StarTwoTone',
+              path: '/center',
+              component: './account/center',
             },
             {
               name: 'editor',

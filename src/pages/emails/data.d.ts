@@ -6,6 +6,11 @@ export interface Member {
 
 export interface ListItemDataType {
   id: string;
+  mail_id: string;
+  from_user: string;
+  send_time: string;
+  from_addr: string;
+  to_addr: string;
   owner: string;
   title: string;
   avatar: string;

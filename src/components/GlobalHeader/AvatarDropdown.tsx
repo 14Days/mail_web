@@ -30,7 +30,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
       return;
     }
 
-    history.push(`/account/${key}`);
+    history.push(`/${key}`);
   };
 
   render(): React.ReactNode {
@@ -47,12 +47,6 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
           <Menu.Item key="center">
             <StarTwoTone />
             个人中心
-          </Menu.Item>
-        )}
-        {menu && (
-          <Menu.Item key="settings">
-            <SettingTwoTone />
-            个人设置
           </Menu.Item>
         )}
         {menu && <Menu.Divider />}

@@ -72,7 +72,7 @@ const OperationModal: FC<OperationModalProps> = (props) => {
           rules={[{ required: true,message: '请输入用户邮箱' }]}
         >
           
-          <Input placeholder="请输入" disabled={current?true:false} />
+          <Input placeholder="请输入" disabled={current?true:false} addonAfter="@wghtstudio.cn" />
         </Form.Item>
         <Form.Item
           name="nickname"
@@ -144,6 +144,8 @@ const OperationModal: FC<OperationModalProps> = (props) => {
           rules={[{ required: true, message: '请选择用户权限' }]}
         >
           <Select placeholder="请选择">
+            
+            <Select.Option value="管理员">管理员</Select.Option>
             <Select.Option value="普通用户">普通用户</Select.Option>
             <Select.Option value="拉黑">拉黑</Select.Option>
           </Select>

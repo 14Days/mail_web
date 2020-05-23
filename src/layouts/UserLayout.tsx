@@ -7,7 +7,7 @@ import image from './img/img3.svg'
 import mailbox from './img/mailbox.svg'
 import avatar from './img/avatar.svg'
 import styles from './UserLayout.less'; 
-import { PageHeader, Button,Tooltip } from 'antd';
+import { PageHeader, Button,Tooltip,Card } from 'antd';
 
 
 export interface UserLayoutProps extends Partial<ConnectProps> {
@@ -44,14 +44,14 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
         title="Mail Manage System"
         className="site-page-header"
         extra={[
-          <Tooltip title="使用文档">
+          <Tooltip title="使用文档" >
             <a
               target="_blank"
               href=""
               rel="noopener noreferrer"
               className={styles.action}
             >
-            <QuestionCircleOutlined />
+            <QuestionCircleOutlined style={{marginRight:"25px"}}/>
           </a>
           </Tooltip>
         ]}
@@ -64,18 +64,21 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
             <div className={styles.column}>
               <img alt="" src={image} className={styles.img}></img>
             </div>
+            
             <div className={styles.column}>
-            <div className={styles.top}>
-              <img alt="avatar" className={styles.avatar} src={avatar} />
-                <div className={styles.header}>
-                  <Link to="/">
-                  <span className={styles.title}>Admin Login</span>
-                  </Link>
-                </div>
+              <Card hoverable={true} bordered={true} style={{marginLeft:"20px",marginRight:"20px"}}>
+                  <div className={styles.top}>
+                    <img alt="avatar" className={styles.avatar} src={avatar} />
+                    <div className={styles.header}>
+                      <Link to="/">
+                      <span className={styles.title}>Admin Login</span>
+                      </Link>
+                    </div>
 
-              <div className={styles.desc}></div>
-              </div>
-              {children}
+                  <div className={styles.desc}></div>
+                  </div>
+                  {children}               
+              </Card>
             </div>
           </div>
         </div>

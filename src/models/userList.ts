@@ -19,6 +19,7 @@ export interface ModelType {
     appendFetch: Effect;
     submit: Effect;
     fetchUserInfo: Effect;
+    query:Effect;
   };
   reducers: {
     queryList: Reducer<StateType>;
@@ -51,8 +52,7 @@ const Model: ModelType = {
             count:response.data.count,
           }
         });
-      }catch(e){
-        showNotification('error', '没有权限或登陆已过期');        
+      }catch(e){        
         history.replace('/admin/login');
       }
     },
@@ -73,8 +73,7 @@ const Model: ModelType = {
           payload: temp
         });
       }
-      catch(e){
-        showNotification('error', '没有权限或登陆已过期');        
+      catch(e){     
         history.replace('/admin/login');
       }
     },
@@ -93,8 +92,7 @@ const Model: ModelType = {
           }
         });
       }
-      catch(e){
-        showNotification('error', '没有权限或登陆已过期');        
+      catch(e){       
         history.replace('/admin/login');
       }
     },
@@ -145,7 +143,15 @@ const Model: ModelType = {
     *submit({ payload }, { call, put }) {
       let msg;
       try{
-        const response = yield call(changeUserInfo, payload.id,payload.nickname,payload.sex=='男'?1:2,payload.password,payload.user_type=='普通用户'?2:3);
+        let user_type=2;
+        if(payload.user_type=='管理员'){
+          user_type=1
+        }else if(payload.user_type=='普通用户'){
+          user_type=2
+        }else
+          user_type=3
+        
+        const response = yield call(changeUserInfo, payload.id,payload.nickname,payload.sex=='男'?1:2,payload.password,user_type);
         console.log(response)
         msg=response.msg;
         if (response.msg === 'success') showNotification('success', '用户信息修改成功');
@@ -179,12 +185,6 @@ const Model: ModelType = {
         ...state,
         info: payload
       };
-    },
-    changeState(state,{payload}){
-      return{
-        ...state,
-        msg:payload
-      }
     },
     appendList(state = { list: [] }, action) {
       return {

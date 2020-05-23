@@ -96,22 +96,23 @@ export const BasicList: FC<BasicListProps> = props => {
       <Search
         className={styles.extraContentSearch}
         placeholder="请输入用户邮箱"
-        onSearch={(value) => {          
-          if(value){
+        onSearch={(value) => { 
             dispatch({
               type:'userList/query',
               payload:value
             })
-          }
-          else{
+        }}
+        onChangeCapture={
+          (e)=>{
             dispatch({
-              type:'userList/fetch',
+              type:'userList/query',
+              payload:e.target.value
             })
           }
-        }}
+        }
       />
       <Button icon={<BellOutlined /> } 
-          className={styles.extraContentButton} type="primary"
+          style={{marginRight:"10px"}} type="primary"
           onClick={()=>{setModalVisible(true)}}
       >
             发送通知
@@ -234,7 +235,7 @@ export const BasicList: FC<BasicListProps> = props => {
               >
                 <List.Item.Meta
                   className={styles.meta}
-                  avatar={<Avatar src={item.user_type=='2'?user:blackhouse} shape="square" size="large" />}
+                  avatar={<Avatar src={item.user_type=='2'?user:blackhouse} shape="square"  />}
                   title={<a className={styles.title}>{item.username}@wghtstudio.cn</a>}
                 />                
                 <ListContent data={item} />
