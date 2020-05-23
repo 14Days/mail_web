@@ -36,21 +36,30 @@ const Info: FC<{
 );
 
 const ListContent = ({
-  data: { nickname, user_type },
+  data: { nickname, user_type  },
 }: {
   data: BasicListItemDataType;
-}) => (
-  <div className={styles.listContent}>
-    <div className={styles.listContentItem}>
-      <span>昵称</span>
-      <p>{nickname}</p>
+}) => {
+  let userType;
+  if(user_type=='1')
+    userType='管理员';
+  else if(user_type=='2')
+    userType='普通用户';
+  else
+    userType='小黑屋';
+  return(
+    <div className={styles.listContent}>
+      <div className={styles.listContentItem}>
+        <span>昵称</span>
+        <p>{nickname}</p>
+      </div>
+      <div className={styles.listContentItem}>
+        <span>权限</span>
+        <p>{userType}</p>
+      </div>
     </div>
-    <div className={styles.listContentItem}>
-      <span>权限</span>
-      <p>{user_type == '2' ? '普通用户' : '小黑屋'}</p>
-    </div>
-  </div>
-);
+  );
+}
 
 export const BasicList: FC<BasicListProps> = props => {
   const addBtn = useRef(null);

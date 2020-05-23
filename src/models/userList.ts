@@ -53,7 +53,8 @@ const Model: ModelType = {
             count:response.data.count,
           }
         });
-      }catch(e){        
+      }catch(e){     
+        showNotification('warning', '服务器错误');   
         history.replace('/admin/login');
       }
     },
@@ -63,11 +64,18 @@ const Model: ModelType = {
         let msg=response.msg;
         if(msg!='success'&&msg)
           showNotification('warning', msg);
+        let userType;
+        if(response.data.user_type=='1')
+          userType='管理员';
+        else if(response.data.user_type=='2')
+          userType='普通用户';
+        else
+          userType='小黑屋';
         const temp={
           nickname:response.data.nickname,
           username:response.data.username,
           sex:response.data.sex==1?'男':'女',
-          user_type:response.data.user_type==2?'普通用户':'拉黑'
+          user_type:userType
         }
         yield put({
           type: 'infoList',
@@ -75,6 +83,7 @@ const Model: ModelType = {
         });
       }
       catch(e){     
+        showNotification('warning', '服务器错误');  
         history.replace('/admin/login');
       }
     },
@@ -94,6 +103,7 @@ const Model: ModelType = {
         });
       }
       catch(e){       
+        showNotification('warning', '服务器错误');  
         history.replace('/admin/login');
       }
     },
@@ -137,7 +147,7 @@ const Model: ModelType = {
           }
         });
       }catch(e){
-        showNotification('error', msg);
+        showNotification('warning', '服务器错误');  
       }
       
     },
@@ -166,7 +176,7 @@ const Model: ModelType = {
           }
         });
       }catch(e){
-        showNotification('error', msg);
+        showNotification('warning', '服务器错误');  
       }
 
       
