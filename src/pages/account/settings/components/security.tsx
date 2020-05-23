@@ -1,5 +1,6 @@
 import { FormattedMessage, formatMessage } from 'umi';
-import React, { Component } from 'react';
+import React, { Component,useState } from 'react';
+import OperationModal from './OperationModal'
 
 import { List } from 'antd';
 
@@ -24,18 +25,22 @@ const passwordStrength = {
   ),
 };
 
-class SecurityView extends Component {
-  getData = () => [
+const pwd=sessionStorage.getItem("password");
+
+function SecurityView() {
+  
+  const [visible, setVisible] = useState<boolean>(false);
+  const getData = () => [
     {
       title: formatMessage({ id: 'accountandsettings.security.password' }, {}),
       description: (
         <>
           {formatMessage({ id: 'accountandsettings.security.password-description' })}：
-          {passwordStrength.strong}
+          {pwd.length>10? passwordStrength.strong:passwordStrength.medium}
         </>
       ),
       actions: [
-        <a key="Modify">
+        <a key="Modify" onClick={()=>{setVisible(true)}}>
           <FormattedMessage id="accountandsettings.security.modify" defaultMessage="Modify" />
         </a>,
       ],
@@ -84,8 +89,8 @@ class SecurityView extends Component {
     },
   ];
 
-  render() {
-    const data = this.getData();
+  
+    const data = getData();
     return (
       <>
         <List<Unpacked<typeof data>>
@@ -97,9 +102,10 @@ class SecurityView extends Component {
             </List.Item>
           )}
         />
+      <OperationModal visible={visible} onCancel={()=>{setVisible(false)}}/>
       </>
     );
-  }
+  
 }
 
 export default SecurityView;

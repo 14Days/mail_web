@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { FormattedMessage, Dispatch, connect } from 'umi';
 import { GridContent } from '@ant-design/pro-layout';
-import { Menu } from 'antd';
+import { Menu,Modal } from 'antd';
 import BaseView from './components/base';
 import BindingView from './components/binding';
 import { CurrentUser } from './data.d';
@@ -32,9 +32,9 @@ class Settings extends Component<SettingsProps, SettingsState> {
   constructor(props: SettingsProps) {
     super(props);
     const menuMap = {
-      base: (
-        <FormattedMessage id="accountandsettings.menuMap.basic" defaultMessage="Basic Settings" />
-      ),
+      // base: (
+      //   <FormattedMessage id="accountandsettings.menuMap.basic" defaultMessage="Basic Settings" />
+      // ),
       security: (
         <FormattedMessage
           id="accountandsettings.menuMap.security"
@@ -57,7 +57,7 @@ class Settings extends Component<SettingsProps, SettingsState> {
     this.state = {
       mode: 'inline',
       menuMap,
-      selectKey: 'base',
+      selectKey: 'security',
     };
   }
 
@@ -115,8 +115,8 @@ class Settings extends Component<SettingsProps, SettingsState> {
   renderChildren = () => {
     const { selectKey } = this.state;
     switch (selectKey) {
-      case 'base':
-        return <BaseView />;
+      // case 'base':
+      //   return <BaseView />;
       case 'security':
         return <SecurityView />;
       case 'binding':

@@ -3,7 +3,6 @@ import { history, Reducer, Effect } from 'umi';
 import {getUserInfo} from '@/services/users'
 import { message } from 'antd';
 import { login } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
 
@@ -17,11 +16,8 @@ export interface LoginModelType {
   namespace: string;
   state: StateType;
   effects: {
-    login: Effect;
+    userlogin: Effect;
     logout: Effect;
-  };
-  reducers: {
-    changeLoginStatus: Reducer<StateType>;
   };
 }
 
@@ -36,7 +32,7 @@ const Model: LoginModelType = {
   effects: {
     *userlogin({ payload }, { call, put }) {
       const { adminname, adminpwd } = payload;
-      const response = yield call(login, adminname, adminpwd);   
+      const response = yield call(login, adminname, adminpwd); 
       console.log(response);
       if (response.msg === 'success') {        
         if(response.data.user_type!='1'){
@@ -44,14 +40,9 @@ const Model: LoginModelType = {
         }
         else{
           message.success('登录成功！');
-          yield put({
-            type: 'changeLoginStatus',
-            payload: {
-              status: response.msg,
-              type: response.data.user_type,
-            }
-          });
           localStorage.setItem('token', response.data.token)
+          sessionStorage.setItem("user_type",response.data.user_type)
+          sessionStorage.setItem("user_id",response.data.user_id)
           sessionStorage.setItem('username',adminname)
           sessionStorage.setItem('password',adminpwd)
           const personalData = yield call(getUserInfo, response.data.user_id);
@@ -87,6 +78,9 @@ const Model: LoginModelType = {
       localStorage.setItem('token', '')      
       sessionStorage.setItem('username','')
       sessionStorage.setItem('password','')
+      sessionStorage.setItem('user_id','')
+      sessionStorage.setItem('nickname','')
+      sessionStorage.setItem('sex','')
       if (window.location.pathname !== '/admin/login' && !redirect) {
         history.replace({
           pathname: '/admin/login',
@@ -98,16 +92,6 @@ const Model: LoginModelType = {
     },
   },
 
-  reducers: {
-    changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
-      return {
-        ...state,
-        status: payload.status,
-        type: payload.type,
-      };
-    },
-  },
 };
 
 export default Model;

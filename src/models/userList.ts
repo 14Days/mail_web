@@ -20,6 +20,7 @@ export interface ModelType {
     submit: Effect;
     fetchUserInfo: Effect;
     query:Effect;
+    delete:Effect;
   };
   reducers: {
     queryList: Reducer<StateType>;
