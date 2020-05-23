@@ -3,7 +3,7 @@ import { history, Reducer, Effect } from 'umi';
 import { changeUserInfo,fetchUsers,getUserInfo,deleteUser,register,queryUser } from '@/services/users'
 import { BasicListItemDataType } from './data';
 import { showNotification } from '@/utils/common';
-
+import {ipFilter} from '@/services/filter'
 export interface StateType {
   list: BasicListItemDataType[];
   count: number;
@@ -43,6 +43,9 @@ const Model: ModelType = {
     *fetch({ payload }, { call, put }) {
       try{
         const response = yield call(fetchUsers);
+        
+        console.log(response);
+        
         let msg=response.msg;
         if(msg!='success'&&msg)
           showNotification('warning', msg);

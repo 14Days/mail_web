@@ -1,5 +1,5 @@
 import { FormattedMessage, formatMessage } from 'umi';
-import React, { Component,useState } from 'react';
+import React, { useState } from 'react';
 import OperationModal from './OperationModal'
 
 import { List } from 'antd';
@@ -97,8 +97,13 @@ function SecurityView() {
           itemLayout="horizontal"
           dataSource={data}
           renderItem={(item) => (
-            <List.Item actions={item.actions}>
-              <List.Item.Meta title={item.title} description={item.description} />
+            <List.Item actions={item.actions} >
+              <List.Item.Meta 
+              title={
+              <a style={{fontSize:"16px",color:"#2F4F4F"}}>
+                {item.title}
+              </a> } 
+              description={item.description} />
             </List.Item>
           )}
         />

@@ -63,7 +63,7 @@ const defaultFooterDom = (
     links={[
       {
         key: 'Ant Design Pro',
-        title: '14Days',
+        title: '14Days Group',
         href: '',
         blankTarget: true,
       },
@@ -75,7 +75,7 @@ const defaultFooterDom = (
       },
       {
         key: 'Ant Design',
-        title: 'Mail',
+        title: 'Mail Manage System',
         href: '',
         blankTarget: true,
       },
@@ -123,6 +123,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   return (
     <>
       <ProLayout
+        style={{fontWeight:549.5}}
         logo={logo}
         formatMessage={formatMessage}
         menuHeaderRender={(logoDom, titleDom) => (
@@ -148,7 +149,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           },
           ...routers,
         ]}
-        itemRender={(route, params, routes, paths) => {
+        itemRender={ (route, params, routes, paths) => {
           const first = routes.indexOf(route) === 0;
           return first ? (
             <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
@@ -166,7 +167,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           {children}
         </Authorized>
       </ProLayout>
-      <SettingDrawer
+      {/* <SettingDrawer
         settings={settings}
         onSettingChange={(config) =>
           dispatch({
@@ -174,7 +175,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             payload: config,
           })
         }
-      />
+      /> */}
     </>
   );
 };

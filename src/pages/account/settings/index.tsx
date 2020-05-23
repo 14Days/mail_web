@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 
 import { FormattedMessage, Dispatch, connect } from 'umi';
 import { GridContent } from '@ant-design/pro-layout';
-import { Menu,Modal } from 'antd';
+import { Menu,Modal,Button, Input } from 'antd';
 import BaseView from './components/base';
 import BindingView from './components/binding';
 import { CurrentUser } from './data.d';
 import NotificationView from './components/notification';
 import SecurityView from './components/security';
 import styles from './style.less';
-
 const { Item } = Menu;
 
 interface SettingsProps {
@@ -24,6 +23,7 @@ interface SettingsState {
     [key: string]: React.ReactNode;
   };
   selectKey: SettingsStateKeys;
+  visible: boolean;
 }
 
 class Settings extends Component<SettingsProps, SettingsState> {
@@ -58,6 +58,7 @@ class Settings extends Component<SettingsProps, SettingsState> {
       mode: 'inline',
       menuMap,
       selectKey: 'security',
+      visible: false,
     };
   }
 
@@ -81,6 +82,8 @@ class Settings extends Component<SettingsProps, SettingsState> {
 
   getRightTitle = () => {
     const { selectKey, menuMap } = this.state;
+    console.log(menuMap[selectKey]);
+    
     return menuMap[selectKey];
   };
 
@@ -131,12 +134,14 @@ class Settings extends Component<SettingsProps, SettingsState> {
   };
 
   render() {
+    const {dispatch} = this.props;
     const { currentUser } = this.props;
     if (!currentUser.userid) {
       return '';
     }
     const { mode, selectKey } = this.state;
     return (
+      <>
       <GridContent>
         <div
           className={styles.main}
@@ -148,6 +153,7 @@ class Settings extends Component<SettingsProps, SettingsState> {
         >
           <div className={styles.leftMenu}>
             <Menu
+              style={{fontWeight:550, fontSize:"16px",color:"#2F4F4F"}}
               mode={mode}
               selectedKeys={[selectKey]}
               onClick={({ key }) => this.selectKey(key as SettingsStateKeys)}
@@ -156,11 +162,44 @@ class Settings extends Component<SettingsProps, SettingsState> {
             </Menu>
           </div>
           <div className={styles.right}>
-            <div className={styles.title}>{this.getRightTitle()}</div>
+            <div className={styles.title}>{this.getRightTitle()}
+            {selectKey=='binding'?<Button type="primary" 
+            onClick={()=>{this.setState({
+              visible: true
+            })}}
+            style={{marginLeft:"1100px"}}>拉黑ip</Button>:''}</div>
+            
             {this.renderChildren()}
           </div>
         </div>
+        
       </GridContent>
+      {/* <OperationModal
+      visible={this.state.visible }
+      onCancel={this.setState({
+        visible:false
+      })}
+      /> */}
+      <Modal
+        visible={this.state.visible }
+        onCancel={()=>{this.setState({
+          visible:false
+        })}}
+        onOk={()=>{
+          dispatch({
+            type:"filter/pullback",
+            payload:document.getElementById("ip").value
+          })
+          this.setState({
+            visible:false
+          })
+        }}
+      >
+        <div style={{marginTop:"20px"}}>
+          <Input id="ip" prefix={"IP地址："} placeholder="请输入IP地址"></Input>
+        </div>
+      </Modal>
+    </>
     );
   }
 }
