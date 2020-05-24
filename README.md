@@ -16,6 +16,20 @@ or
 yarn
 ```
 
+## 安装相关依赖
+```bash
+npm install antd enquire-js rc-queue-anim rc-scroll-anim rc-tween-one --save;
+npm install rc-banner-anim --save;
+```
+
+## 解决node-gyp安装 报错if not defined npm_config_node_gyp
+```
+第一步
+npm install -g node-gyp
+第二步
+npm config set node_gyp "node C:\Users\me\AppData\Roaming\npm\node_modules\node-gyp\bin\node-gyp.js"
+```
+
 ## Provided Scripts
 
 Ant Design Pro provides some useful script to help you quick start and build with web project, code style check and test.
