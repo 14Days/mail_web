@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { FormattedMessage, Dispatch, connect } from 'umi';
 import { GridContent } from '@ant-design/pro-layout';
-import { Menu,Modal,Button, Input } from 'antd';
+import { Menu,Modal,Button, Input,Card } from 'antd';
 import BaseView from './components/base';
 import {StopOutlined} from '@ant-design/icons';
 import BindingView from './components/binding';
@@ -162,18 +162,21 @@ class Settings extends Component<SettingsProps, SettingsState> {
               {this.getMenu()}
             </Menu>
           </div>
-          <div className={styles.right}>
-            <div className={styles.title}>{this.getRightTitle()}
-              {selectKey=='binding'?<Button type="primary" 
+         <div className={styles.right}>
+          <Card              
+              title={<a className={styles.cardTitle}>{this.getRightTitle()}</a>}
+              extra={selectKey=='binding'?<Button type="primary" 
               icon={<StopOutlined/>}
               style={{marginLeft:"20px"}}
               onClick={()=>{this.setState({
                 visible: true
               })}}>拉黑 IP</Button>:''}
-          </div>
+            >            
+              {this.renderChildren()}
+            </Card>
+         </div>
             
-            {this.renderChildren()}
-          </div>
+          
         </div>
         
       </GridContent>
