@@ -47,7 +47,7 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
           <Tooltip title="使用文档"  >
             <a
               target="_blank"
-              href="/users"
+              href="/"
               rel="noopener noreferrer"
               className={styles.action}
             >
@@ -66,7 +66,7 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
             </div>
             
             <div className={styles.column}>
-              <Card hoverable={true} bordered={true} style={{marginLeft:"20px",marginRight:"20px",marginTop:'40px'}}>
+              <Card hoverable={true} bordered={true} style={{marginLeft:"20px",marginRight:"20px"}}>
                   <div className={styles.top}>
                     <img alt="avatar" className={styles.avatar} src={avatar} />
                     <div className={styles.header}>
