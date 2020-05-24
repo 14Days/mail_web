@@ -34,6 +34,10 @@ export default defineConfig({
   // umi routes: https://umijs.org/docs/routing
   routes: [
     {
+      path:'/home',
+      component: './Home',
+    },
+    {
       path: '/',
       component: '../layouts/BlankLayout',
       routes: [
@@ -147,5 +151,5 @@ export default defineConfig({
     basePath: '/',
   },
   proxy: proxy[REACT_APP_ENV || 'dev'],
-  chainWebpack: webpackPlugin,
+  // chainWebpack: webpackPlugin,暂时不支持 landing 的 less，所以我们先暂时删除换肤插件
 });

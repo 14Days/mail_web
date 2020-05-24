@@ -20,6 +20,7 @@ yarn
 ```bash
 npm install antd enquire-js rc-queue-anim rc-scroll-anim rc-tween-one --save;
 npm install rc-banner-anim --save;
+cnpm install @ant-design/compatible --save;
 ```
 
 ## 解决node-gyp安装 报错if not defined npm_config_node_gyp

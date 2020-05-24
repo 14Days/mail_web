@@ -41,13 +41,13 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
        
       <div className={styles.container}>
       <PageHeader
-        title="Mail Manage System"
+        title="邮 件 管 理 系 统"
         className="site-page-header"
         extra={[
-          <Tooltip title="使用文档" >
+          <Tooltip title="使用文档"  >
             <a
               target="_blank"
-              href=""
+              href="/users"
               rel="noopener noreferrer"
               className={styles.action}
             >
@@ -66,13 +66,11 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
             </div>
             
             <div className={styles.column}>
-              <Card hoverable={true} bordered={true} style={{marginLeft:"20px",marginRight:"20px"}}>
+              <Card hoverable={true} bordered={true} style={{marginLeft:"20px",marginRight:"20px",marginTop:'40px'}}>
                   <div className={styles.top}>
                     <img alt="avatar" className={styles.avatar} src={avatar} />
                     <div className={styles.header}>
-                      <Link to="/">
-                      <span className={styles.title}>Admin Login</span>
-                      </Link>
+                      <span className={styles.title}>管 理 员 登 陆</span>
                     </div>
 
                   <div className={styles.desc}></div>

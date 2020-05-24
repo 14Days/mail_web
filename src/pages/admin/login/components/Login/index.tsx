@@ -34,26 +34,21 @@ const Login = (props) => {
         name="adminname"
         rules={[{ required: true, message: 'Please input your Username!' }]}
       >
-        <Input size="large" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+        <Input size="large" prefix={<UserOutlined className="site-form-item-icon" />}  placeholder="Username" />
       </Form.Item>
       <Form.Item
         name="adminpwd"
         rules={[{ required: true, message: 'Please input your Password!' }]}
+        style={{marginTop:"20px"}} 
       >
         <Input size="large"
-          prefix={<LockOutlined className="site-form-item-icon" />}
+          prefix={<LockOutlined className="site-form-item-icon" style={{marginTop:"10px"}} />}
           type="password"
           placeholder="Password"
         />
       </Form.Item>
       <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-      </Form.Item>
-
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className={styles.login} >
+        <Button type="primary" htmlType="submit" size="large" style={{marginTop:"10px"}}  className={styles.login} >
           Log in
         </Button>
       </Form.Item>
