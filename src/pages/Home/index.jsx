@@ -30,7 +30,7 @@ export default class Home extends React.Component {
     super(props);
     this.state = {
       isMobile,
-      show: !location.port, // 如果不是 dva 2.0 请删除
+      // show: !location.port, // 如果不是 dva 2.0 请删除
     };
   }
 
@@ -39,17 +39,17 @@ export default class Home extends React.Component {
     enquireScreen((b) => {
       this.setState({ isMobile: !!b });
     });
-    // dva 2.0 样式在组件渲染之后动态加载，导致滚动组件不生效；线上不影响；
-    /* 如果不是 dva 2.0 请删除 start */
-    if (location.port) {
-      // 样式 build 时间在 200-300ms 之间;
-      setTimeout(() => {
-        this.setState({
-          show: true,
-        });
-      }, 500);
-    }
-    /* 如果不是 dva 2.0 请删除 end */
+    // // dva 2.0 样式在组件渲染之后动态加载，导致滚动组件不生效；线上不影响；
+    // /* 如果不是 dva 2.0 请删除 start */
+    // if (location.port) {
+    //   // 样式 build 时间在 200-300ms 之间;
+    //   setTimeout(() => {
+    //     this.setState({
+    //       show: true,
+    //     });
+    //   }, 500);
+    // }
+    // /* 如果不是 dva 2.0 请删除 end */
   }
 
   render() {
@@ -60,11 +60,13 @@ export default class Home extends React.Component {
         dataSource={Banner20DataSource}
         isMobile={this.state.isMobile}
       />,
+        
       <Banner4
         id="Banner4_0"
         key="Banner4_0"
         dataSource={Banner40DataSource}
         isMobile={this.state.isMobile}
+        
       />,
       <Content0
         id="Content0_0"
@@ -72,12 +74,14 @@ export default class Home extends React.Component {
         dataSource={Content00DataSource}
         isMobile={this.state.isMobile}
       />,
+    
       <Teams0
         id="Teams0_0"
         key="Teams0_0"
         dataSource={Teams00DataSource}
         isMobile={this.state.isMobile}
       />,
+      
       <Footer0
         id="Footer0_0"
         key="Footer0_0"
@@ -93,7 +97,8 @@ export default class Home extends React.Component {
         }}
       >
         {/* 如果不是 dva 2.0 替换成 {children} start */}
-        {this.state.show && children}
+        {/* {this.state.show && children} */}
+        {children}
         {/* 如果不是 dva 2.0 替换成 {children} end */}
       </div>
     );

@@ -20,15 +20,15 @@ yarn
 ```bash
 npm install antd enquire-js rc-queue-anim rc-scroll-anim rc-tween-one --save;
 npm install rc-banner-anim --save;
-cnpm install @ant-design/compatible --save;
+npm install @ant-design/compatible --save;
 ```
 
-## 解决node-gyp安装 报错if not defined npm_config_node_gyp
+## 解决Windows node-gyp安装 报错if not defined npm_config_node_gyp
 ```
-第一步
-npm install -g node-gyp
-第二步
-npm config set node_gyp "node C:\Users\me\AppData\Roaming\npm\node_modules\node-gyp\bin\node-gyp.js"
+Install all the required tools and configurations using Microsoft's windows-build-tools using 
+    npm install --global --production windows-build-tools 
+from an elevated PowerShell or CMD.exe (run as Administrator).
+
 ```
 
 ## Provided Scripts

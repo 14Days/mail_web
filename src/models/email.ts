@@ -74,6 +74,7 @@ const Model: EmailModelType = {
       },
       *delete({ payload }, { call, put }) {
         try{
+          console.log(payload)
           const response = yield call(deleteEmail,payload);
           console.log(response)
           let msg=response.msg;

@@ -44,7 +44,7 @@ export const Banner40DataSource = {
         name: 'title',
         children: (
           <span>
-            <p>邮箱管理系统</p>
+            <p>邮 箱 管 理 系 统</p>
           </span>
         ),
         className: 'banner4-title',
@@ -54,13 +54,14 @@ export const Banner40DataSource = {
         className: 'banner4-content kakp8u4f3fe-editor_css',
         children: (
           <span>
-            <p>一款优秀的邮箱管理系统</p>
+            <p style={{marginLeft:"320px",width:"600px"}}>邮 箱 管 理 系 统 拥有丰富的管理功能，管理、添加用户，向用户发送通知、管理邮件，也可设置邮箱参数，
+              快速管理一个属于你的邮箱系统</p>
           </span>
         ),
       },
       {
         name: 'button',
-        children: { href: '#', type: 'primary', children: '开始使用' },
+        children: { href: '/admin/login', type: 'primary', size: 'large', children: '开始使用' },
       },
     ],
   },
