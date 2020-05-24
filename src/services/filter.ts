@@ -19,9 +19,12 @@ export async function getIP() {
 
 }
 //取消拉黑ip
-export async function deleteIP(ip_id) {
-    return request('/api/filter/'+ip_id, {
-        method: 'post',
+export async function deleteIP(id) {
+    return request('/api/filter', {
+        method: 'delete',
+        data:{
+            id
+        }
     });
 
 }

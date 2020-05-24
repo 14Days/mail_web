@@ -40,7 +40,7 @@ const Model: LoginModelType = {
         }
         else{
           message.success('登录成功！');
-          localStorage.setItem('token', response.data.token)
+          sessionStorage.setItem('token', response.data.token)
           sessionStorage.setItem("user_type",response.data.user_type)
           sessionStorage.setItem("user_id",response.data.user_id)
           sessionStorage.setItem('username',adminname)

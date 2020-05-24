@@ -1,6 +1,6 @@
 import { FormattedMessage, formatMessage } from 'umi';
 import { AlipayOutlined, DingdingOutlined, TaobaoOutlined } from '@ant-design/icons';
-import { List,Button } from 'antd';
+import { List,Modal } from 'antd';
 import React, { Component, Fragment,useEffect } from 'react';
 import ip from '@/assets/img/ip.svg'
 import { connect } from 'dva';
@@ -9,6 +9,14 @@ import { connect } from 'dva';
   filter,
 }))
 class BindingView extends Component {
+  constructor(props) {
+    super(props);
+    this.state={
+      visible: false,
+      ip_id: '',
+    }
+  }
+  
   componentWillMount(){
     const {dispatch} = this.props
     dispatch({
@@ -51,9 +59,9 @@ class BindingView extends Component {
   render() {
     const {filter,dispatch}=this.props
     const {list} = filter
-    console.log(list);
-    
-    return (      
+    const {visible, ip_id} = this.state    
+    return (  
+      <>    
         <List 
           itemLayout="horizontal"
           dataSource={list}
@@ -67,10 +75,37 @@ class BindingView extends Component {
                 </a>}
                 // description={item.description}
               />
-              <a>取消封禁</a>
+              <a onClick={()=>{                
+                this.setState({
+                  visible:true,
+                  ip_id:item.ip_id,
+                })
+              }}>取消封禁</a>
             </List.Item>
           )}
         />
+        <Modal
+          title={"解除IP封禁"}
+          visible={visible }
+          onCancel={()=>{this.setState({
+            visible:false
+          })}}
+          onOk={()=>{
+            
+            dispatch({
+              type:"filter/delete",
+              payload:ip_id,
+            })
+            this.setState({
+              visible:false
+            })
+          }}
+        >
+        <p style={{textAlign:'center',fontSize:'16px',}}>
+              确定解除该ip封禁？
+          </p> 
+        </Modal>
+        </>
     );
   }
 }

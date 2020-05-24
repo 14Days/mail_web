@@ -52,6 +52,7 @@ const Model: EmailModelType = {
           payload: Array.isArray(response.data.res) ? response.data.res : [],
         });
       }catch(e){        
+        showNotification('warning','没有权限' );
         history.replace('/admin/login');
       }
     },
@@ -67,6 +68,7 @@ const Model: EmailModelType = {
           if(msg!='success'&&msg)
             showNotification('warning', msg);
         }catch(e){     
+          showNotification('warning','没有权限' );
           history.replace('/admin/login');
         }
       },
@@ -97,7 +99,7 @@ const Model: EmailModelType = {
             payload: Array.isArray(res.data.res) ? res.data.res : [],
           });
         }catch(e){  
-          showNotification('warning','服务器错误' );
+          showNotification('warning','没有权限' );
           history.replace('/admin/login');
         }
       }

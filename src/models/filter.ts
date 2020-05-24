@@ -65,14 +65,14 @@ const Model: EmailModelType = {
           payload: Array.isArray(res.data.res) ? res.data.res : [],
           });
         }catch(e){     
-          showNotification('success', '服务器错误')
+          showNotification('success', '没有权限')
           history.replace('/admin/login');
         }
       },
       *delete({ payload }, { call, put }) {
         try{
           const response = yield call(deleteIP,payload);
-          console.log(response)
+          console.log(payload)
           let msg=response.msg;
           if(msg=='success')
             showNotification('success', response.data)
@@ -85,7 +85,7 @@ const Model: EmailModelType = {
             payload: Array.isArray(res.data.res) ? res.data.res : [],
           });
         }catch(e){  
-          showNotification('warning','服务器错误' );
+          showNotification('warning','没有权限' );
           history.replace('/admin/login');
         }
       }

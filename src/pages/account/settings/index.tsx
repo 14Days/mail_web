@@ -4,6 +4,7 @@ import { FormattedMessage, Dispatch, connect } from 'umi';
 import { GridContent } from '@ant-design/pro-layout';
 import { Menu,Modal,Button, Input } from 'antd';
 import BaseView from './components/base';
+import {StopOutlined} from '@ant-design/icons';
 import BindingView from './components/binding';
 import { CurrentUser } from './data.d';
 import NotificationView from './components/notification';
@@ -163,24 +164,21 @@ class Settings extends Component<SettingsProps, SettingsState> {
           </div>
           <div className={styles.right}>
             <div className={styles.title}>{this.getRightTitle()}
-            {selectKey=='binding'?<Button type="primary" 
-            onClick={()=>{this.setState({
-              visible: true
-            })}}
-            style={{marginLeft:"1100px"}}>拉黑ip</Button>:''}</div>
+              {selectKey=='binding'?<Button type="primary" 
+              icon={<StopOutlined/>}
+              style={{marginLeft:"20px"}}
+              onClick={()=>{this.setState({
+                visible: true
+              })}}>拉黑 IP</Button>:''}
+          </div>
             
             {this.renderChildren()}
           </div>
         </div>
         
       </GridContent>
-      {/* <OperationModal
-      visible={this.state.visible }
-      onCancel={this.setState({
-        visible:false
-      })}
-      /> */}
       <Modal
+        title={"拉黑 IP"}
         visible={this.state.visible }
         onCancel={()=>{this.setState({
           visible:false
@@ -195,8 +193,8 @@ class Settings extends Component<SettingsProps, SettingsState> {
           })
         }}
       >
-        <div style={{marginTop:"20px"}}>
-          <Input id="ip" prefix={"IP地址："} placeholder="请输入IP地址"></Input>
+        <div style={{marginLeft:"20px",marginRight:"20px"}}>
+          <Input id="ip" prefix={"IP地址："} placeholder="请输入IP地址" size="large"></Input>
         </div>
       </Modal>
     </>

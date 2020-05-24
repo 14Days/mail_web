@@ -57,7 +57,7 @@ const Model: ModelType = {
           }
         });
       }catch(e){     
-        showNotification('warning', '服务器错误');   
+        showNotification('warning', '没有权限');   
         history.replace('/admin/login');
       }
     },
@@ -86,7 +86,7 @@ const Model: ModelType = {
         });
       }
       catch(e){     
-        showNotification('warning', '服务器错误');  
+        showNotification('warning', '没有权限');  
         history.replace('/admin/login');
       }
     },
@@ -106,7 +106,7 @@ const Model: ModelType = {
         });
       }
       catch(e){       
-        showNotification('warning', '服务器错误');  
+        showNotification('warning', '没有权限');  
         history.replace('/admin/login');
       }
     },
@@ -150,7 +150,7 @@ const Model: ModelType = {
           }
         });
       }catch(e){
-        showNotification('warning', '服务器错误');  
+        showNotification('warning', '没有权限');  
       }
       
     },
@@ -179,7 +179,7 @@ const Model: ModelType = {
           }
         });
       }catch(e){
-        showNotification('warning', '服务器错误');  
+        showNotification('warning', '没有权限');  
       }
 
       

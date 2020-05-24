@@ -63,7 +63,7 @@ const request = extend({
 
 //添加拦截钩子
 request.interceptors.request.use((url, options) => {
-  let token = localStorage.getItem("token");
+  let token = sessionStorage.getItem("token");
   const headers = {
     'Access-Control-Allow-Origin': '*',
   };
