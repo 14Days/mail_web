@@ -21,6 +21,7 @@ interface BasicListProps {
   dispatch: Dispatch<any>;
   loading: boolean;
   count: number;
+  page:number;
 }
 
 const Info: FC<{
@@ -66,7 +67,7 @@ export const BasicList: FC<BasicListProps> = props => {
   const {
     loading,
     dispatch,
-    userList: { list, count },
+    userList: { list, count},
   } = props;
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [done, setDone] = useState<boolean>(false);
@@ -74,21 +75,18 @@ export const BasicList: FC<BasicListProps> = props => {
   const [current, setCurrent] = useState<string | undefined>(undefined);
   const [userid, setUserid] = useState<string | undefined>(undefined);
   const [NoticeModalVisible,setModalVisible] = useState<boolean>(false);
+  const [pagenumber, setPage] = useState<number>(0)
 
   useEffect(() => {
     //获取用户列表
     dispatch({
       type: 'userList/fetch',
+      payload: {
+        page:pagenumber,
+        limit:5
+      }
     });
   }, [1]);
-
-  const paginationProps = {
-    showSizeChanger: false,
-    showQuickJumper: false,
-    pageSize: 6,
-    total: count,
-  };
-
   const showModal = () => {
     setVisible(true);
     setCurrent(undefined);
@@ -154,13 +152,13 @@ export const BasicList: FC<BasicListProps> = props => {
     if(current){      
       dispatch({
         type: 'userList/submit',
-        payload: { id, ...values },
+        payload: {pagenumber, id, ...values },
       });
     }
     else{      
       dispatch({
         type: 'userList/appendFetch',
-        payload: {...values },
+        payload: {...values ,pagenumber},
       });
     }    
     setVisible(false);
@@ -216,7 +214,22 @@ export const BasicList: FC<BasicListProps> = props => {
             size="large"
             rowKey="id"
             loading={loading}
-            pagination={paginationProps}
+            pagination={{
+               onChange : (page)=>{
+                setPage(page-1)
+                console.log(page,pagenumber);
+                
+                dispatch({
+                  type: 'userList/fetch',
+                  payload: {
+                    page:page-1,
+                    limit:5
+                  }
+                });            
+              },
+              pageSize:5,
+              total:count,             
+            }}
             dataSource={list}
             renderItem={item => (
               <List.Item
@@ -266,10 +279,15 @@ export const BasicList: FC<BasicListProps> = props => {
         destroyOnClose
         title={'删除用户'}
         visible={createModalVisible}
-        onOk={(value) => {          
+        onOk={(value) => {  
+          console.log(pagenumber);
+                  
           dispatch({
             type:'userList/delete',
-            payload:userid
+            payload:{
+              userid,
+              pagenumber,
+            }
           });
           handleModalVisible(false)
         }}

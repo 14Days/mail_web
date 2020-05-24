@@ -2,9 +2,13 @@ import request from '@/utils/request';
 
 
 //获取用户列表
-export async function fetchUsers() {
+export async function fetchUsers(limit,page) {
     return request('/api/user', {
         method: 'get',
+        params:{
+            limit,
+            page,
+        }
     });
 
 }

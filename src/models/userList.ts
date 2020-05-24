@@ -8,7 +8,7 @@ export interface StateType {
   list: BasicListItemDataType[];
   count: number;
   info:  Partial<BasicListItemDataType> | undefined;
-  msg: string
+  msg: string;
 }
 
 export interface ModelType {
@@ -42,10 +42,7 @@ const Model: ModelType = {
   effects: {
     *fetch({ payload }, { call, put }) {
       try{
-        const response = yield call(fetchUsers);
-        
-        console.log(response);
-        
+        const response = yield call(fetchUsers,payload.limit,payload.page);  
         let msg=response.msg;
         if(msg!='success'&&msg)
           showNotification('warning', msg);
@@ -114,12 +111,12 @@ const Model: ModelType = {
     *delete({ payload }, { call, put }) {
       let msg
       try{
-        const response = yield call(deleteUser, payload);
+        const response = yield call(deleteUser, payload.userid);
         console.log
         msg=response.msg
         if (response.msg === 'success') showNotification('success', '删除用户成功');
         else if(msg) showNotification('success', msg);
-        const res = yield call(fetchUsers);
+        const res = yield call(fetchUsers,5,payload.pagenumber);
         yield put({
           type: 'queryList',
           payload: {
@@ -141,7 +138,7 @@ const Model: ModelType = {
         msg=response.msg
         if (response.msg === 'success') showNotification('success', '创建用户成功');
         else if(msg) showNotification('success', msg);
-        const res = yield call(fetchUsers);
+        const res = yield call(fetchUsers,5,payload.pagenumber);
         yield put({
           type: 'queryList',
           payload: {
@@ -170,7 +167,9 @@ const Model: ModelType = {
         msg=response.msg;
         if (response.msg === 'success') showNotification('success', '用户信息修改成功');
         else if(msg) showNotification('success', msg);
-        const res = yield call(fetchUsers);
+        console.log(payload.pagenumber);
+        
+        const res = yield call(fetchUsers,5,payload.pagenumber);
         yield put({
           type: 'queryList',
           payload: {
