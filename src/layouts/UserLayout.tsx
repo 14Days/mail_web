@@ -47,7 +47,7 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
           <Tooltip title="使用文档"  >
             <a
               target="_blank"
-              href="/"
+              href="/home"
               rel="noopener noreferrer"
               className={styles.action}
             >

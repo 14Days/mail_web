@@ -34,7 +34,7 @@ export default defineConfig({
   // umi routes: https://umijs.org/docs/routing
   routes: [
     {
-      path:'/',
+      path:'/home',
       component: './Home',
     },
     {

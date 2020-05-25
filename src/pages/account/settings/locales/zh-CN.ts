@@ -2,7 +2,7 @@ export default {
   'accountandsettings.menuMap.basic': '基本设置',
   'accountandsettings.menuMap.security': '安全设置',
   'accountandsettings.menuMap.binding': 'I P 过滤',
-  'accountandsettings.menuMap.notification': '新消息通知',
+  'accountandsettings.menuMap.notification': '服务启停',
   'accountandsettings.basic.avatar': '头像',
   'accountandsettings.basic.change-avatar': '更换头像',
   'accountandsettings.basic.email': '邮箱',

@@ -155,10 +155,13 @@ export const BasicList: FC<BasicListProps> = props => {
         payload: {pagenumber, id, ...values },
       });
     }
-    else{      
+    else{  
       dispatch({
         type: 'userList/appendFetch',
-        payload: {...values ,pagenumber},
+        payload: {
+          ...values ,
+          pagenumber
+        },
       });
     }    
     setVisible(false);
@@ -193,7 +196,7 @@ export const BasicList: FC<BasicListProps> = props => {
           style={{
             marginTop: 24,
           }}          
-          bodyStyle={{ padding: '32px 32px 32px 32px' }}
+          bodyStyle={{ padding: '0px 32px 32px 32px' }}
           extra={extraContent}
         >
           <Button

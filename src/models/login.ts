@@ -75,7 +75,7 @@ const Model: LoginModelType = {
     logout() {
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note
-      localStorage.setItem('token', '')      
+      sessionStorage.setItem('token', '')      
       sessionStorage.setItem('username','')
       sessionStorage.setItem('password','')
       sessionStorage.setItem('user_id','')
