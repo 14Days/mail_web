@@ -23,7 +23,6 @@ interface OperationModalProps {
   onCancel: () => void;
 }
 
-const { TextArea } = Input;
 const formLayout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 13 },
@@ -32,7 +31,7 @@ const formLayout = {
 const OperationModal: FC<OperationModalProps> = (props) => {
   
   const [form] = Form.useForm();
-  const { done, visible, current, onDone, onCancel, onSubmit,userList:{info,msg} } = props;
+  const { done, visible, current, onCancel, onSubmit,userList:{info} } = props;
   useEffect(() => {
     if (form && !visible) {
       form.resetFields();
@@ -63,103 +62,142 @@ const OperationModal: FC<OperationModalProps> = (props) => {
     ? {  okText: '保存', onOk: handleSubmit, onCancel  }
     : { okText: '确定', onOk: handleSubmit, onCancel };
 
-  const getModalContent = () => {
-    return (
-      <Form {...formLayout} form={form} onFinish={handleFinish}>
-        <Form.Item
-          name="username"
-          label="用户邮箱"
-          rules={[{ required: true,message: '请输入用户邮箱' }]}
-        >
-          
-          <Input placeholder="请输入" disabled={current?true:false} addonAfter="@wghtstudio.cn" />
-        </Form.Item>
-        <Form.Item
-          name="nickname"
-          label="用户昵称"
-          rules={[{ required: true, message: '请输入用户昵称' }]}
-        >
-          <Input placeholder="请输入" />
-          
-        </Form.Item>
-        <Form.Item
-          name="sex"
-          label="性别"
-          rules={[{ required: true, message: '请输入用户性别' }]}
-        >
-          <Select placeholder="请选择">
-            <Select.Option value="男">男</Select.Option>
-            <Select.Option value="女">女</Select.Option>
-          </Select>
-
-        </Form.Item>
-        <Form.Item
-          name="password"
-          label="用户密码"
-          // 判断密码是否符合要求
-          rules={[{
-            required: current?false:true,
-            message: '密码不能为空',
-          },
-            ({ getFieldValue }) => ({
-            validator(rule, value) {
-              let l_flag=false,d_flag=false;
-              for (var i in value) {
-                  var asc = value.charCodeAt(i);
-                  if ((asc >= 65 && asc <= 90 || asc >= 97 && asc <= 122)) {
-                      l_flag=true;
-                  }
-                  if((asc>=48 && asc <=57)){
-                    d_flag=true;
-                  }
-              }  
-              if(current){
-                  if ((l_flag && d_flag &&value.length>=6)|| !value ) {
+    const EditContent = () => {
+      return (
+        <Form {...formLayout} form={form} onFinish={handleFinish}>
+          <Form.Item
+            name="username"
+            label="用户邮箱"
+            rules={[{ required: true,message: '请输入用户邮箱' }]}
+          >
+            
+            <Input placeholder="请输入" disabled addonAfter="@wghtstudio.cn" />
+          </Form.Item>
+          <Form.Item
+            name="nickname"
+            label="用户昵称"
+            rules={[{ required: true, message: '请输入用户昵称' }]}
+          >
+            <Input placeholder="请输入" />
+            
+          </Form.Item>
+          <Form.Item
+            name="sex"
+            label="性别"
+            rules={[{ required: true, message: '请输入用户性别' }]}
+          >
+            <Select placeholder="请选择">
+              <Select.Option value="男">男</Select.Option>
+              <Select.Option value="女">女</Select.Option>
+            </Select>
+  
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="用户密码"
+            // 判断密码是否符合要求
+            rules={[{
+              required: current?false:true,
+              message: '密码不能为空',
+            },
+              ({ getFieldValue }) => ({
+              validator(rule, value) {
+                let l_flag=false,d_flag=false;
+                for (var i in value) {
+                    var asc = value.charCodeAt(i);
+                    if ((asc >= 65 && asc <= 90 || asc >= 97 && asc <= 122)) {
+                        l_flag=true;
+                    }
+                    if((asc>=48 && asc <=57)){
+                      d_flag=true;
+                    }
+                }  
+                if(current){
+                    if ((l_flag && d_flag &&value.length>=6)|| !value ) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject('密码至少六位且包含字母和数字');
+                }
+                else{
+                  if ((l_flag && d_flag &&value.length>=6)|| !value) {
                     return Promise.resolve();
                   }
                   return Promise.reject('密码至少六位且包含字母和数字');
-              }
-              else{
-                if ((l_flag && d_flag &&value.length>=6)|| !value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject('密码至少六位且包含字母和数字');
-              }          
+                }          
+                
+                
+              },
+            }) ]}
+          >
+            <Input.Password placeholder="******"/>
+          </Form.Item>
+          <Form.Item
+            name="user_type"
+            label="用户权限"
+            rules={[{ required: true, message: '请选择用户权限' }]}
+          >
+            <Select placeholder="请选择">
               
-              
+              <Select.Option value="管理员">管理员</Select.Option>
+              <Select.Option value="普通用户">普通用户</Select.Option>
+              <Select.Option value="拉黑">拉黑</Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      );
+    };
+    const AddContent = () => {
+      return (
+        <Form {...formLayout} form={form} onFinish={handleFinish}>
+          <Form.Item
+            name="username"
+            label="用户邮箱"
+            rules={[{ required: true,message: '请输入用户邮箱' }]}
+          >            
+            <Input placeholder="请输入" addonAfter="@wghtstudio.cn" />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="用户密码"
+            // 判断密码是否符合要求
+            rules={[{
+              required: current?false:true,
+              message: '密码不能为空',
             },
-          }) ]}
-        >
-          <Input.Password placeholder="******"/>
-          {/* <DatePicker
-            showTime
-            placeholder="请选择"
-            format="YYYY-MM-DD HH:mm:ss"
-            style={{ width: '100%' }}
-          /> */}
-        </Form.Item>
-        <Form.Item
-          name="user_type"
-          label="用户权限"
-          rules={[{ required: true, message: '请选择用户权限' }]}
-        >
-          <Select placeholder="请选择">
-            
-            <Select.Option value="管理员">管理员</Select.Option>
-            <Select.Option value="普通用户">普通用户</Select.Option>
-            <Select.Option value="拉黑">拉黑</Select.Option>
-          </Select>
-        </Form.Item>
-        {/* <Form.Item
-          name="subDescription"
-          label="产品描述"
-          rules={[{ message: '请输入至少五个字符的产品描述！', min: 5 }]}
-        >
-          <TextArea rows={4} placeholder="请输入至少五个字符" />
-        </Form.Item> */}
-      </Form>
-    );
-  };
+              ({ getFieldValue }) => ({
+              validator(rule, value) {
+                let l_flag=false,d_flag=false;
+                for (var i in value) {
+                    var asc = value.charCodeAt(i);
+                    if ((asc >= 65 && asc <= 90 || asc >= 97 && asc <= 122)) {
+                        l_flag=true;
+                    }
+                    if((asc>=48 && asc <=57)){
+                      d_flag=true;
+                    }
+                }  
+                if(current){
+                    if ((l_flag && d_flag &&value.length>=6)|| !value ) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject('密码至少六位且包含字母和数字');
+                }
+                else{
+                  if ((l_flag && d_flag &&value.length>=6)|| !value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('密码至少六位且包含字母和数字');
+                }          
+                
+                
+              },
+            }) ]}
+          >
+            <Input.Password placeholder="******"/>
+          </Form.Item>
+        </Form>
+      );
+    };
 
   return (
     <Modal
@@ -171,7 +209,7 @@ const OperationModal: FC<OperationModalProps> = (props) => {
       visible={visible}
       {...modalFooter}
     >
-      {getModalContent()}
+      {current?EditContent():AddContent()}
     </Modal>
   );
 };

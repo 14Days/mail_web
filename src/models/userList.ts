@@ -115,7 +115,7 @@ const Model: ModelType = {
         console.log
         msg=response.msg
         if (response.msg === 'success') showNotification('success', '删除用户成功');
-        else if(msg) showNotification('success', msg);
+        else if(msg) showNotification('error', msg);
         const res = yield call(fetchUsers,5,payload.pageNumber);
         yield put({
           type: 'queryList',
@@ -136,16 +136,22 @@ const Model: ModelType = {
         const response = yield call(register, payload.username,payload.password);
         console.log(response)
         msg=response.msg
-        if (response.msg === 'success') showNotification('success', '创建用户成功');
-        else if(msg) showNotification('success', msg);
-        const res = yield call(fetchUsers,5,payload.pageNumber);
-        yield put({
-          type: 'queryList',
-          payload: {
-            userList:Array.isArray(res.data.res) ? res.data.res : [],
-            count:res.data.count,
-          }
-        });
+        if (response.msg === 'success') 
+        {
+          showNotification('success', '创建用户成功');
+          const res = yield call(fetchUsers,5,payload.pageNumber);
+          yield put({
+            type: 'queryList',
+            payload: {
+              userList:Array.isArray(res.data.res) ? res.data.res : [],
+              count:res.data.count,
+            }
+          });
+        }
+        else if(msg){
+          showNotification('error', msg);
+        } 
+        
       }catch(e){
         showNotification('warning', '没有权限');  
       }

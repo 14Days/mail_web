@@ -18,10 +18,8 @@ interface ArticlesProps {
   loading: boolean;
 }
 const Articles: FC<ArticlesProps> = ({ dispatch, email: { list,count }, loading }) => {
-  
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);  
+    
   const [pageNumber, setPage] = useState<number>(0)
-  const [mailId,setMailId] = useState<number>(0)
   useEffect(() => {
     dispatch({
       type: 'email/fetch',
@@ -57,7 +55,7 @@ const Articles: FC<ArticlesProps> = ({ dispatch, email: { list,count }, loading 
                  limit:4
                }
              });            
-           },
+           },      
            pageSize:4,
            total:count,             
          }}

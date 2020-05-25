@@ -55,7 +55,7 @@ export const BasicList: FC<BasicListProps> = props => {
   const {
     loading,
     dispatch,
-    userList: { list, count},
+    userList: { list, count },
   } = props;
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [done, setDone] = useState<boolean>(false);
@@ -148,9 +148,10 @@ export const BasicList: FC<BasicListProps> = props => {
         type: 'userList/appendFetch',
         payload: {
           ...values ,
-          pageNumber
+          pageNumber:pageNumber
         },
       });
+      setPage(count%5==0?count/5:count/5+1)
     }    
     setVisible(false);
   };
@@ -277,7 +278,7 @@ export const BasicList: FC<BasicListProps> = props => {
             type:'userList/delete',
             payload:{
               userid,
-              pageNumber,
+              pageNumber:count-pageNumber*5==1?pageNumber-1:pageNumber,
             }
           });
           handleModalVisible(false)
