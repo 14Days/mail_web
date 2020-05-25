@@ -1,13 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, Card, Col, Form, List, Row, Select, Tag, Modal } from 'antd';
-import { LoadingOutlined, StarOutlined, LikeOutlined, MessageOutlined,MailOutlined } from '@ant-design/icons';
+import { Card, List, Modal } from 'antd';
+import { MailOutlined } from '@ant-design/icons';
 import { connect, Dispatch } from 'umi';
 import ArticleListContent from './components/ArticleListContent';
-import { Collapse } from 'antd';
-const { Panel } = Collapse;
 import { ListItemDataType } from './data.d';
-import StandardFormRow from './components/StandardFormRow';
-import TagSelect from './components/TagSelect';
 import mail from '@/assets/img/mail.svg'
 import styles from './style.less';
 
@@ -15,72 +11,27 @@ export interface StateType {
   list: ListItemDataType[];
 }
 
-const { Option } = Select;
-const FormItem = Form.Item;
-
-const pageSize = 5;
 
 interface ArticlesProps {
   dispatch: Dispatch<any>;
   email: StateType;
   loading: boolean;
 }
-const Articles: FC<ArticlesProps> = ({ dispatch, email: { list }, loading }) => {
+const Articles: FC<ArticlesProps> = ({ dispatch, email: { list,count }, loading }) => {
   
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
+  const [createModalVisible, handleModalVisible] = useState<boolean>(false);  
+  const [pageNumber, setPage] = useState<number>(0)
+  const [mailId,setMailId] = useState<number>(0)
   useEffect(() => {
     dispatch({
       type: 'email/fetch',
-      payload: '2'
+      payload: {
+        limit:4,
+        page:pageNumber
+      }
     });
   }, [1]);
 
-
-  const IconText: React.FC<{
-    type: string;
-    text: React.ReactNode;
-  }> = ({ type, text }) => {
-    switch (type) {
-      case 'star-o':
-        return (
-          <span>
-            <StarOutlined style={{ marginRight: 8 }} />
-            {text}
-          </span>
-        );
-      case 'like-o':
-        return (
-          <span>
-            <LikeOutlined style={{ marginRight: 8 }} />
-            {text}
-          </span>
-        );
-      case 'message':
-        return (
-          <span>
-            <MessageOutlined style={{ marginRight: 8 }} />
-            {text}
-          </span>
-        );
-      default:
-        return null;
-    }
-  };
-
-
-  // const loadMore = list.length > 0 && (
-  //   <div style={{ textAlign: 'center', marginTop: 16 }}>
-  //     <Button onClick={fetchMore} style={{ paddingLeft: 48, paddingRight: 48 }}>
-  //       {loading ? (
-  //         <span>
-  //           <LoadingOutlined /> 加载中...
-  //         </span>
-  //       ) : (
-  //         '加载更多'
-  //       )}
-  //     </Button>
-  //   </div>
-  // );
 
   return (
     <>      
@@ -96,17 +47,25 @@ const Articles: FC<ArticlesProps> = ({ dispatch, email: { list }, loading }) => 
           loading={list.length === 0 ? loading : false}
           rowKey="id"
           itemLayout="vertical"
+          pagination={{
+            onChange : (page)=>{
+             setPage(page-1)             
+             dispatch({
+               type: 'email/fetch',
+               payload: {
+                 page:page-1,
+                 limit:4
+               }
+             });            
+           },
+           pageSize:4,
+           total:count,             
+         }}
           // loadMore={loadMore}
           dataSource={list}
           renderItem={(item) => (
             <List.Item
               key={item.mail_id}
-              // actions={[
-              //   <IconText key="star" type="star-o" text={item.star} />,
-              //   <IconText key="like" type="like-o" text={item.like} />,
-              //   <IconText key="message" type="message" text={item.message} />,
-              // ]}
-              // extra={<div className={styles.listItemExtra} />}
               style={{marginBottom:"15px"}}
             >
               <List.Item.Meta
@@ -120,28 +79,12 @@ const Articles: FC<ArticlesProps> = ({ dispatch, email: { list }, loading }) => 
                   </a>
                 }
               />
-              <ArticleListContent data={item} />
+              <ArticleListContent data={item} pageNumber={count-pageNumber*4==1?pageNumber-1:pageNumber} />
             </List.Item>
           )}
         />
       </Card>
-      <Modal
-        destroyOnClose
-        title={'删除用户'}
-        visible={createModalVisible}
-        onOk={(value) => {          
-          dispatch({
-            type:'userList/delete',
-            payload:mail_id
-          });
-          handleModalVisible(false)
-        }}
-        onCancel={() => handleModalVisible(false)}
-        >
-          <p style={{textAlign:'center',fontSize:'16px'}}>
-              确定删除该邮件？
-          </p>        
-      </Modal>
+     
     </>
   );
 };

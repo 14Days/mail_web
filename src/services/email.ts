@@ -15,7 +15,7 @@ export async function sendEmails(content,subject) {
 
 
 //获取邮件列表
-export async function getEmails() {
+export async function getEmails(limit,page) {
     return request('/api/mail/receive', {
         method: 'get',
     });

@@ -6,6 +6,7 @@ import { showNotification } from '@/utils/common';
 
 export interface StateType {
   list: ListItemDataType[];
+  count:number;
 }
 
 export interface EmailModelType {
@@ -18,7 +19,6 @@ export interface EmailModelType {
   };
   reducers: {
     queryList: Reducer<StateType>;
-    appendList: Reducer<StateType>;
   };
 }
 
@@ -27,12 +27,13 @@ const Model: EmailModelType = {
 
   state: {
     list: [],
+    count: 0,
   },
 
   effects: {
     *fetch({ payload }, { call, put }) {
       try{
-        const response = yield call(getEmails)
+        const response = yield call(getEmails,payload.limit,payload.page)
         console.log(response);
         
         let mails=response.data.res;
@@ -49,7 +50,11 @@ const Model: EmailModelType = {
         }     
         yield put({
           type: 'queryList',
-          payload: Array.isArray(response.data.res) ? response.data.res : [],
+          payload: {
+            list:Array.isArray(response.data.res) ? response.data.res : [],
+            count:response.data.count,
+          }
+
         });
       }catch(e){        
         showNotification('warning','没有权限' );
@@ -75,14 +80,14 @@ const Model: EmailModelType = {
       *delete({ payload }, { call, put }) {
         try{
           console.log(payload)
-          const response = yield call(deleteEmail,payload);
+          const response = yield call(deleteEmail,payload.mail_id);
           console.log(response)
           let msg=response.msg;
           if(msg=='success')
             showNotification('success', response.data)
           if(msg!='success'&&msg)
             showNotification('warning', msg);
-          const res = yield call(getEmails)
+          const res = yield call(getEmails,4,payload.pageNumber)
           let mails=res.data.res;
           let i=0,len=mails.length;
           msg=res.msg;
@@ -97,7 +102,10 @@ const Model: EmailModelType = {
           }     
           yield put({
             type: 'queryList',
-            payload: Array.isArray(res.data.res) ? res.data.res : [],
+            payload: {
+              list:Array.isArray(res.data.res) ? res.data.res : [],
+              count:res.data.count,
+            }
           });
         }catch(e){  
           showNotification('warning','没有权限' );
@@ -109,13 +117,8 @@ const Model: EmailModelType = {
       queryList(state, action) {
         return {
           ...state,
-          list: action.payload,
-        };
-      },
-      appendList(state, action) {
-        return {
-          ...state,
-          list: (state as StateType).list.concat(action.payload),
+          list: action.payload.list,
+          count: action.payload.count,
         };
       },
     },

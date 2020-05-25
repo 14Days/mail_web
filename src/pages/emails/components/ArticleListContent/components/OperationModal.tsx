@@ -19,23 +19,22 @@ interface OperationModalProps {
   loading: boolean;
   mail_id: number;
   onCancel: () => void;
+  pageNumber: number;
 }
 
-const { TextArea } = Input;
-const formLayout = {
-  labelCol: { span: 7 },
-  wrapperCol: { span: 13 },
-};
 
 const OperationModal: FC<OperationModalProps> = (props) => {
   
-  const { dispatch,visible, mail_id,onCancel } = props;
+  const { dispatch,visible, mail_id,onCancel,pageNumber } = props;
  
   const handleSubmit = () => {
     console.log(mail_id)
     dispatch({
       type:'email/delete',
-      payload:mail_id
+      payload:{
+        mail_id,
+        pageNumber
+      }
     })
     onCancel()
   };

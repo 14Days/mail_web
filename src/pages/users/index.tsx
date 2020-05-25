@@ -24,18 +24,6 @@ interface BasicListProps {
   page:number;
 }
 
-const Info: FC<{
-  title: React.ReactNode;
-  value: React.ReactNode;
-  bordered?: boolean;
-}> = ({ title, value, bordered }) => (
-  <div className={styles.headerInfo}>
-    <span>{title}</span>
-    <p>{value}</p>
-    {bordered && <em />}
-  </div>
-);
-
 const ListContent = ({
   data: { nickname, user_type  },
 }: {
@@ -75,14 +63,14 @@ export const BasicList: FC<BasicListProps> = props => {
   const [current, setCurrent] = useState<string | undefined>(undefined);
   const [userid, setUserid] = useState<string | undefined>(undefined);
   const [NoticeModalVisible,setModalVisible] = useState<boolean>(false);
-  const [pagenumber, setPage] = useState<number>(0)
+  const [pageNumber, setPage] = useState<number>(0)
 
   useEffect(() => {
     //获取用户列表
     dispatch({
       type: 'userList/fetch',
       payload: {
-        page:pagenumber,
+        page:pageNumber,
         limit:5
       }
     });
@@ -152,7 +140,7 @@ export const BasicList: FC<BasicListProps> = props => {
     if(current){      
       dispatch({
         type: 'userList/submit',
-        payload: {pagenumber, id, ...values },
+        payload: {pageNumber, id, ...values },
       });
     }
     else{  
@@ -160,7 +148,7 @@ export const BasicList: FC<BasicListProps> = props => {
         type: 'userList/appendFetch',
         payload: {
           ...values ,
-          pagenumber
+          pageNumber
         },
       });
     }    
@@ -220,7 +208,7 @@ export const BasicList: FC<BasicListProps> = props => {
             pagination={{
                onChange : (page)=>{
                 setPage(page-1)
-                console.log(page,pagenumber);
+                console.log(page,pageNumber);
                 
                 dispatch({
                   type: 'userList/fetch',
@@ -283,13 +271,13 @@ export const BasicList: FC<BasicListProps> = props => {
         title={'删除用户'}
         visible={createModalVisible}
         onOk={(value) => {  
-          console.log(pagenumber);
+          console.log(pageNumber);
                   
           dispatch({
             type:'userList/delete',
             payload:{
               userid,
-              pagenumber,
+              pageNumber,
             }
           });
           handleModalVisible(false)

@@ -116,7 +116,7 @@ const Model: ModelType = {
         msg=response.msg
         if (response.msg === 'success') showNotification('success', '删除用户成功');
         else if(msg) showNotification('success', msg);
-        const res = yield call(fetchUsers,5,payload.pagenumber);
+        const res = yield call(fetchUsers,5,payload.pageNumber);
         yield put({
           type: 'queryList',
           payload: {
@@ -138,7 +138,7 @@ const Model: ModelType = {
         msg=response.msg
         if (response.msg === 'success') showNotification('success', '创建用户成功');
         else if(msg) showNotification('success', msg);
-        const res = yield call(fetchUsers,5,payload.pagenumber);
+        const res = yield call(fetchUsers,5,payload.pageNumber);
         yield put({
           type: 'queryList',
           payload: {
@@ -167,9 +167,8 @@ const Model: ModelType = {
         msg=response.msg;
         if (response.msg === 'success') showNotification('success', '用户信息修改成功');
         else if(msg) showNotification('success', msg);
-        console.log(payload.pagenumber);
         
-        const res = yield call(fetchUsers,5,payload.pagenumber);
+        const res = yield call(fetchUsers,5,payload.pageNumber);
         yield put({
           type: 'queryList',
           payload: {

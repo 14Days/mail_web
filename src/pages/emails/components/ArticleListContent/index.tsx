@@ -17,9 +17,10 @@ interface ArticleListContentProps {
     to_addr: string;
     mail_id:number;
   };
+  pageNumber:number;
 }
 const ArticleListContent: React.FC<ArticleListContentProps> = ({
-  data: { content, from_addr, to_addr, send_time,mail_id}  
+  data: { content, from_addr, to_addr, send_time,mail_id} ,pageNumber 
 }) => {  
   const [visible, setVisible] = useState<boolean>(false);
   
@@ -35,6 +36,7 @@ const ArticleListContent: React.FC<ArticleListContentProps> = ({
       <OperationModal
           mail_id={mail_id}
           visible={visible}
+          pageNumber={pageNumber}
           onCancel={()=>{setVisible(false)}}
         />
     </div>
