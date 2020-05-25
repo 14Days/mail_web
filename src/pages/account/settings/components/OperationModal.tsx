@@ -1,22 +1,15 @@
 import React, { FC, useEffect } from 'react';
 import moment from 'moment';
 import { Modal, Result, Button, Form, DatePicker, Input, Select } from 'antd';
-import { BasicListItemDataType } from '../data.d';
 import styles from '../style.less';
 import { connect, Dispatch } from 'umi';
 
 export interface StateType {
-  list: BasicListItemDataType[];
   count: number;
-  info: Partial<BasicListItemDataType> | undefined;
-  msg: string;
 }
 interface OperationModalProps {
   done: boolean;
-  visible: boolean;
-  current: Partial<BasicListItemDataType> | undefined;  
-  onDone: () => void;
-  onSubmit: (values: BasicListItemDataType) => void;
+  visible: boolean; 
   dispatch: Dispatch<any>;
   loading: boolean;
   onCancel: () => void;

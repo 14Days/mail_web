@@ -6,7 +6,6 @@ import {ipFilter,getIP,deleteIP} from '@/services/filter'
 
 export interface StateType {
   list: ListItemDataType[];
-  visible: boolean;
 }
 
 export interface EmailModelType {
@@ -27,7 +26,6 @@ const Model: EmailModelType = {
 
   state: {
     list: [],
-    visible: false,
   },
 
   effects: {
@@ -55,7 +53,7 @@ const Model: EmailModelType = {
           if(msg=='success')
             showNotification('success', response.data)
           if(msg!='success'&&msg)
-            showNotification('warning', msg);
+            showNotification('error', "IP地址不合法");
           const res = yield call(getIP)
           msg=res.msg;
           if(msg!='success'&&msg)

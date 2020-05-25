@@ -260,7 +260,7 @@ export const BasicList: FC<BasicListProps> = props => {
               >
                 <List.Item.Meta
                   className={styles.meta}
-                  avatar={<Avatar src={item.user_type=='2'?user:blackhouse} shape="square"  />}
+                  avatar={<Avatar src={item.user_type=='3'?blackhouse:user} shape="square"  />}
                   title={<a className={styles.title}>{item.username}@wghtstudio.cn</a>}
                 />                
                 <ListContent data={item} />

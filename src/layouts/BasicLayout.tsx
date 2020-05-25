@@ -64,7 +64,7 @@ const defaultFooterDom = (
       {
         key: 'Ant Design Pro',
         title: '14Days Group',
-        href: '',
+        href: 'https://github.com/14Days',
         blankTarget: true,
       },
       {

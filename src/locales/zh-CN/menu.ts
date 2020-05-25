@@ -40,7 +40,7 @@ export default {
   'menu.exception.not-find': '404',
   'menu.exception.server-error': '500',
   'menu.exception.trigger': '触发错误',
-  'menu.settings': '系统设置',  
+  'menu.settings': '系统管理',  
   'menu.account': '个人账户',
   'menu.center': '个人中心',
   'menu.account.trigger': '触发报错',

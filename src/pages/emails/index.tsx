@@ -33,7 +33,7 @@ const Articles: FC<ArticlesProps> = ({ dispatch, email: { list }, loading }) => 
       type: 'email/fetch',
       payload: '2'
     });
-  }, []);
+  }, [1]);
 
 
   const IconText: React.FC<{

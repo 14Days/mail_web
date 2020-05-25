@@ -181,7 +181,7 @@ class Settings extends Component<SettingsProps, SettingsState> {
         
       </GridContent>
       <Modal
-        title={"拉黑 IP"}
+        title={"拉黑 I P"}
         visible={this.state.visible }
         onCancel={()=>{this.setState({
           visible:false
@@ -197,7 +197,7 @@ class Settings extends Component<SettingsProps, SettingsState> {
         }}
       >
         <div style={{marginLeft:"20px",marginRight:"20px"}}>
-          <Input id="ip" prefix={"IP地址："} placeholder="请输入IP地址" size="large"></Input>
+          <Input id="ip" placeholder="请输入IP地址" size="large"></Input>
         </div>
       </Modal>
     </>
