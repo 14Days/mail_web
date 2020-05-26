@@ -9,6 +9,8 @@ export interface StateType {
   count: number;
   info:  Partial<BasicListItemDataType> | undefined;
   msg: string;
+  currentPage: number;
+  queryName: string;
 }
 
 export interface ModelType {
@@ -37,6 +39,8 @@ const Model: ModelType = {
     count:0,
     info: undefined,
     msg: '',
+    currentPage: 0,
+    queryName: '',
   },
 
   effects: {
@@ -51,6 +55,7 @@ const Model: ModelType = {
           payload: {
             userList:Array.isArray(response.data.res) ? response.data.res : [],
             count:response.data.count,
+            currentPage:payload.page
           }
         });
       }catch(e){     
@@ -90,7 +95,7 @@ const Model: ModelType = {
 
     *query({ payload }, { call, put }) {
       try{
-        const response = yield call(queryUser, payload);
+        const response = yield call(queryUser, payload.value,5,payload.pageNumber);
         let msg=response.msg;
         if(msg!='success'&&msg)
           showNotification('warning', msg);
@@ -99,6 +104,8 @@ const Model: ModelType = {
           payload: {
             userList:Array.isArray(response.data.res) ? response.data.res : [],
             count:response.data.count,
+            currentPage:payload.pageNumber,
+            queryName:payload.value,
           }
         });
       }
@@ -112,7 +119,7 @@ const Model: ModelType = {
       let msg
       try{
         const response = yield call(deleteUser, payload.userid);
-        console.log
+        console.log(payload.pageNumber)
         msg=response.msg
         if (response.msg === 'success') showNotification('success', '删除用户成功');
         else if(msg) showNotification('error', msg);
@@ -122,6 +129,7 @@ const Model: ModelType = {
           payload: {
             userList:Array.isArray(res.data.res) ? res.data.res : [],
             count:res.data.count,
+            currentPage:payload.pageNumber
           }
         });
       }catch(e){
@@ -145,6 +153,7 @@ const Model: ModelType = {
             payload: {
               userList:Array.isArray(res.data.res) ? res.data.res : [],
               count:res.data.count,
+              currentPage:payload.pageNumber              
             }
           });
         }
@@ -180,6 +189,7 @@ const Model: ModelType = {
           payload: {
             userList:Array.isArray(res.data.res) ? res.data.res : [],
             count:res.data.count,
+            currentPage:payload.pageNumber
           }
         });
       }catch(e){
@@ -196,6 +206,8 @@ const Model: ModelType = {
         ...state,
         list: payload.userList,
         count: payload.count,
+        currentPage: payload.currentPage,
+        queryName: payload.queryName,
       };
     },
     infoList(state, { payload }) {

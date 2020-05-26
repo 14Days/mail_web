@@ -109,7 +109,7 @@ export const Content00DataSource = {
                 <span>
                   <span>
                     <span>
-                      <p>可实现对用户的授权、销权、拉黑、封禁、删除等操作</p>
+                      <p>可在这里创建新用户以及实现对用户的授权、销权、拉黑、封禁、删除等操作</p>
                     </span>
                   </span>
                 </span>
@@ -185,7 +185,7 @@ export const Content00DataSource = {
                 <span>
                   <span>
                     <span>
-                      <p>可对邮箱系统进行管理、拉黑、解封IP</p>
+                      <p>可对邮箱系统进行管理、拉黑、解封IP以及设置服务的启停、以及邮件协议的端口号</p>
                     </span>
                   </span>
                 </span>

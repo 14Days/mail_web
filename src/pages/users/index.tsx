@@ -15,6 +15,8 @@ const { Search } = Input;
 export interface StateType {
   list: BasicListItemDataType[];
   count: number;
+  currentPage: number;
+  queryName: string;
 }
 interface BasicListProps {
   userList: StateType;
@@ -55,7 +57,7 @@ export const BasicList: FC<BasicListProps> = props => {
   const {
     loading,
     dispatch,
-    userList: { list, count },
+    userList: { list, count, currentPage, queryName },
   } = props;
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [done, setDone] = useState<boolean>(false);
@@ -63,14 +65,15 @@ export const BasicList: FC<BasicListProps> = props => {
   const [current, setCurrent] = useState<string | undefined>(undefined);
   const [userid, setUserid] = useState<string | undefined>(undefined);
   const [NoticeModalVisible,setModalVisible] = useState<boolean>(false);
-  const [pageNumber, setPage] = useState<number>(0)
-
+  const [pageNumber, setPage] = useState<number>(currentPage)
+  console.log("currentPage:",currentPage);
+  
   useEffect(() => {
     //获取用户列表
     dispatch({
       type: 'userList/fetch',
       payload: {
-        page:pageNumber,
+        page:0,
         limit:5
       }
     });
@@ -94,14 +97,20 @@ export const BasicList: FC<BasicListProps> = props => {
         onSearch={(value) => { 
             dispatch({
               type:'userList/query',
-              payload:value
+              payload:{
+                value,
+                pageNumber,
+              }
             })
         }}
         onChangeCapture={
           (e)=>{
             dispatch({
               type:'userList/query',
-              payload:e.target.value
+              payload:{
+                value:e.target.value,
+                pageNumber,
+              }
             })
           }
         }
@@ -151,7 +160,7 @@ export const BasicList: FC<BasicListProps> = props => {
           pageNumber:pageNumber
         },
       });
-      setPage(count%5==0?count/5:count/5+1)
+      
     }    
     setVisible(false);
   };
@@ -208,10 +217,14 @@ export const BasicList: FC<BasicListProps> = props => {
             loading={loading}
             pagination={{
                onChange : (page)=>{
-                setPage(page-1)
-                console.log(page,pageNumber);
-                
-                dispatch({
+                setPage(page-1)                
+                queryName?dispatch({
+                  type: 'userList/query',
+                  payload: {
+                    value:queryName,
+                    pageNumber:page-1
+                  }
+                }): dispatch({
                   type: 'userList/fetch',
                   payload: {
                     page:page-1,
@@ -272,8 +285,8 @@ export const BasicList: FC<BasicListProps> = props => {
         title={'删除用户'}
         visible={createModalVisible}
         onOk={(value) => {  
-          console.log(pageNumber);
-                  
+          console.log("pageNumber:",pageNumber);
+                            
           dispatch({
             type:'userList/delete',
             payload:{

@@ -34,11 +34,12 @@ export async function getUserInfo(userID) {
 }
 
 //查询用户
-export async function queryUser(username) {
+export async function queryUser(username,limit,page) {
     return request('/api/user', {
         method: 'get',
         params:{
           username,
+          limit,page
         }
     });
 
